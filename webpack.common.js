@@ -11,10 +11,6 @@ module.exports = {
       p5: 'p5/lib/p5.min.js'
     }
   },
-  devtool: 'inline-source-map',
-  devServer: {
-    contentBase: './dist'
-  },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
