@@ -6,7 +6,15 @@ module.exports = {
   entry: {
     app: './src/index.js'
   },
-
+  resolve: {
+    alias: {
+      p5: 'p5/lib/p5.min.js'
+    }
+  },
+  devtool: 'inline-source-map',
+  devServer: {
+    contentBase: './dist'
+  },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
@@ -14,7 +22,6 @@ module.exports = {
       template: 'index.html'
     })
   ],
-
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist')
