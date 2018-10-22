@@ -6,11 +6,6 @@ module.exports = {
   entry: {
     app: './src/index.js'
   },
-  resolve: {
-    alias: {
-      p5: 'p5/lib/p5.min.js'
-    }
-  },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
@@ -19,7 +14,23 @@ module.exports = {
     })
   ],
   output: {
-    filename: '[name].bundle.js',
+    filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist')
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      }
+    ]
   }
 }
