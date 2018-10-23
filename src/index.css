@@ -9,3 +9,14 @@ body {
   width: 100vw;
   overflow: hidden;
 }
+
+#ui {
+  background: white;
+  position: fixed;
+  top: 1em;
+  left: 1em;
+}
+
+label {
+  display: block;
+}
