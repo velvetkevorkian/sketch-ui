@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import './index.css'
-import {createUI, getSetting} from './ui.js'
+import {createUI, getSetting, setSetting} from './ui.js'
 
 let state = {
   fillColor: {
@@ -34,6 +34,10 @@ const sketch = p => {
     p.background(getSetting(state, 'backgroundColor'))
     p.fill(getSetting(state, 'fillColor'))
     p.ellipse(p.windowWidth/2, p.windowHeight/2, getSetting(state, 'width'))
+  }
+
+  p.doubleClicked = () => {
+    setSetting(state, 'width', 20)
   }
 }
 

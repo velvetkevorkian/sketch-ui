@@ -40,4 +40,9 @@ function getSetting(state, key) {
   else return state[key].value
 }
 
-export {createUI, getSetting}
+function setSetting(state, key, value) {
+  state[key].value = value
+  document.getElementById(key).value = value
+}
+
+export {createUI, getSetting, setSetting}
