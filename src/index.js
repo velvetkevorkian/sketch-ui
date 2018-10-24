@@ -26,7 +26,9 @@ function settings(key) {
 }
 
 function createUI() {
-  const ui = document.getElementById('ui')
+  const ui = document.createElement('div')
+  ui.setAttribute('id', 'ui')
+  document.body.appendChild(ui)
 
   Object.entries(state).forEach(item => {
     const name = item[0]
