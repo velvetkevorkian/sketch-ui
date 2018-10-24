@@ -9,11 +9,20 @@ let state = {
   backgroundColor: {
     value: '#202020',
     type: 'color'
+  },
+  width: {
+    value: 50,
+    type: 'range',
+    min: 0,
+    max: 500,
+    step: 1
   }
 }
 
 function settings(key) {
-  return state[key].value
+  const type = state[key].type
+  if(type == 'number' || type == 'range') return parseFloat(state[key].value)
+  else return state[key].value
 }
 
 function createUI() {
@@ -30,8 +39,10 @@ function createUI() {
 
     let input = document.createElement('input')
     input.setAttribute('id', name)
-    input.setAttribute('type', config.type)
-    input.setAttribute('value', config.value)
+    Object.entries(config).forEach(attr => {
+      input.setAttribute(attr[0], attr[1])
+    })
+
     input.addEventListener('input', event => {
       state[name].value = event.target.value
     })
@@ -53,7 +64,7 @@ const sketch = p => {
   p.draw = () => {
     p.background(settings('backgroundColor'))
     p.fill(settings('fillColor'))
-    p.ellipse(p.windowWidth/2, p.windowHeight/2, 50, 50)
+    p.ellipse(p.windowWidth/2, p.windowHeight/2, settings('width'))
   }
 }
 
