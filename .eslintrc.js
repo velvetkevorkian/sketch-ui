@@ -8,7 +8,8 @@ module.exports = {
   rules: {
     'no-console': 'warn',
     'no-debugger': 'warn',
-    'semi': ['warn', 'never']
+    'semi': ['warn', 'never'],
+    'no-unused-vars': 'warn'
   },
   parserOptions: {
     "ecmaVersion": 6,

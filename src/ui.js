@@ -8,7 +8,7 @@ function createUI(object) {
     const config = item[1]
 
     ui.appendChild(buildLabel(name))
-    ui.appendChild(buildInput(object, name, config))
+    ui.appendChild(buildInput(name, config))
   })
 }
 
@@ -19,14 +19,16 @@ function buildLabel(name) {
   return label
 }
 
-function buildInput(object, name, config) {
+function buildInput(name, config) {
   let input = document.createElement('input')
   input.setAttribute('id', name)
+
   Object.entries(config).forEach(attr => {
     input.setAttribute(attr[0], attr[1])
   })
+
   input.addEventListener('input', event => {
-    object[name].value = event.target.value
+    config.value = event.target.value
   })
 
   return input

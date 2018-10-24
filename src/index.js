@@ -37,4 +37,4 @@ const sketch = p => {
   }
 }
 
-const p5js = new p5(sketch)
+new p5(sketch)
