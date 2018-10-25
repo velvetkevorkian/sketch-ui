@@ -1,6 +1,6 @@
 import p5 from 'p5'
 import './index.css'
-import {createUI, getSetting, setSetting} from './ui.js'
+import UI from './ui.js'
 
 let state = {
   strokeColor: {
@@ -28,27 +28,29 @@ let state = {
 }
 
 new p5(p => {
+  let ui
+
   p.setup = () => {
     p.createCanvas(p.windowWidth, p.windowHeight)
-    createUI(state)
-    p.background(getSetting(state, 'backgroundColor'))
+    ui = new UI(state)
+    p.background(ui.var('backgroundColor'))
   }
 
   p.windowResized = () => {
     p.resizeCanvas(p.windowWidth, p.windowHeight)
-    p.background(getSetting(state, 'backgroundColor'))
+    p.background(ui.var('backgroundColor'))
   }
 
   p.draw = () => {
     p.noFill()
-    const str = p.color(getSetting(state, 'strokeColor'))
-    str.setAlpha(getSetting(state, 'strokeAlpha'))
+    const str = p.color(ui.getSetting('strokeColor'))
+    str.setAlpha(ui.var('strokeAlpha'))
     p.stroke(str)
-    p.ellipse(p.windowWidth/2, p.windowHeight/2, getSetting(state, 'diameter'))
+    p.ellipse(p.windowWidth/2, p.windowHeight/2, ui.var('diameter'))
   }
 
   p.doubleClicked = () => {
-    p.background(getSetting(state, 'backgroundColor'))
-    setSetting(state, 'diameter', 50)
+    p.background(ui.getSetting('backgroundColor'))
+    ui.var('diameter', 50)
   }
 })
