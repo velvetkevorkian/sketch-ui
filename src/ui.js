@@ -25,11 +25,27 @@ class UI {
     return label
   }
 
+  defaultSettings(type) {
+    const defaults = {
+      range: {
+        step: 1,
+        min: 0,
+        max: 255
+      }
+    }
+
+    if(defaults[type] === undefined) return {}
+    else return defaults[type]
+  }
+
   buildInput(name, config) {
     let input = document.createElement('input')
     input.setAttribute('id', name)
 
-    Object.entries(config).forEach(attr => {
+    if(config.type === undefined) config.type = 'range'
+    const attrs = Object.assign(this.defaultSettings(config.type), config)
+
+    Object.entries(attrs).forEach(attr => {
       input.setAttribute(attr[0], attr[1])
     })
 

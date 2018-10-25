@@ -8,11 +8,7 @@ let state = {
     type: 'color'
   },
   strokeAlpha: {
-    value: 10,
-    type: 'range',
-    min: 0,
-    max: 255,
-    step: 1
+    value: 10
   },
   backgroundColor: {
     value: '#202020',
@@ -20,10 +16,7 @@ let state = {
   },
   diameter: {
     value: 50,
-    type: 'range',
-    min: 0,
-    max: 500,
-    step: 1
+    max: 500
   }
 }
 
