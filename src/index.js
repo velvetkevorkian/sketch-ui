@@ -3,15 +3,22 @@ import './index.css'
 import {createUI, getSetting, setSetting} from './ui.js'
 
 let state = {
-  fillColor: {
+  strokeColor: {
     value: '#ff0000',
     type: 'color'
+  },
+  strokeAlpha: {
+    value: 10,
+    type: 'range',
+    min: 0,
+    max: 255,
+    step: 1
   },
   backgroundColor: {
     value: '#202020',
     type: 'color'
   },
-  width: {
+  diameter: {
     value: 50,
     type: 'range',
     min: 0,
@@ -20,25 +27,28 @@ let state = {
   }
 }
 
-const sketch = p => {
+new p5(p => {
   p.setup = () => {
     p.createCanvas(p.windowWidth, p.windowHeight)
     createUI(state)
+    p.background(getSetting(state, 'backgroundColor'))
   }
 
   p.windowResized = () => {
     p.resizeCanvas(p.windowWidth, p.windowHeight)
+    p.background(getSetting(state, 'backgroundColor'))
   }
 
   p.draw = () => {
-    p.background(getSetting(state, 'backgroundColor'))
-    p.fill(getSetting(state, 'fillColor'))
-    p.ellipse(p.windowWidth/2, p.windowHeight/2, getSetting(state, 'width'))
+    p.noFill()
+    const str = p.color(getSetting(state, 'strokeColor'))
+    str.setAlpha(getSetting(state, 'strokeAlpha'))
+    p.stroke(str)
+    p.ellipse(p.windowWidth/2, p.windowHeight/2, getSetting(state, 'diameter'))
   }
 
   p.doubleClicked = () => {
-    setSetting(state, 'width', 20)
+    p.background(getSetting(state, 'backgroundColor'))
+    setSetting(state, 'diameter', 50)
   }
-}
-
-new p5(sketch)
+})
