@@ -25,7 +25,8 @@
   "scripts": {
     "build": "webpack --config webpack.production.js",
     "serve": "webpack-dev-server --config webpack.dev.js",
-    "test": "mocha-webpack --watch --opts test/mocha.opts"
+    "test": "mocha-webpack --opts test/mocha.opts",
+    "test:watch": "mocha-webpack --watch --opts test/mocha.opts"
   },
   "keywords": [],
   "author": "",
