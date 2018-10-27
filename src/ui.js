@@ -46,7 +46,9 @@ class UI {
     const attrs = Object.assign(this.defaultSettings(config.type), config)
 
     Object.entries(attrs).forEach(attr => {
-      input.setAttribute(attr[0], attr[1])
+      const name = attr[0]
+      const value = attr[1]
+      input.setAttribute(name, value)
     })
 
     input.addEventListener('input', event => {

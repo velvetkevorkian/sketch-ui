@@ -6,6 +6,11 @@ module.exports = {
   entry: {
     app: './src/index.js'
   },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src')
+    }
+  },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
@@ -27,6 +32,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
+          //TODO: use mini-css-extract-plugin in production
           'style-loader',
           'css-loader'
         ]
