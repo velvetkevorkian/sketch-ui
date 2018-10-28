@@ -5,23 +5,29 @@ class UI {
   }
 
   createUI(object) {
-    const ui = document.createElement('div')
-    ui.setAttribute('id', 'ui')
-    document.body.appendChild(ui)
+    const panel = this.buildPanel()
 
     Object.entries(object).forEach(item => {
       const name = item[0]
       const config = item[1]
 
-      ui.appendChild(this.buildLabel(name))
-      ui.appendChild(this.buildInput(name, config))
+      panel.appendChild(this.buildLabel(name))
+      panel.appendChild(this.buildInput(name, config))
     })
+  }
+
+  buildPanel() {
+    const panel = document.createElement('div')
+    panel.setAttribute('id', 'ui')
+    document.body.appendChild(panel)
+    return panel
   }
 
   buildLabel(name) {
     const label = document.createElement('label')
     label.setAttribute('for', name)
     label.appendChild(document.createTextNode(name))
+    label.appendChild(document.createElement('span'))
     return label
   }
 
@@ -44,15 +50,18 @@ class UI {
 
     if(config.type === undefined) config.type = 'range'
     const attrs = Object.assign(this.defaultSettings(config.type), config)
+    document.querySelector(`[for=${name}] span`).innerHTML = config.value
 
     Object.entries(attrs).forEach(attr => {
-      const name = attr[0]
+      const attrName = attr[0]
       const value = attr[1]
-      input.setAttribute(name, value)
+      input.setAttribute(attrName, value)
     })
 
     input.addEventListener('input', event => {
-      config.value = event.target.value
+      const newValue = event.target.value
+      config.value = newValue
+      document.querySelector(`[for=${name}] span`).innerHTML = newValue
     })
 
     return input

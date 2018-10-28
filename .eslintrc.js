@@ -10,7 +10,14 @@ module.exports = {
     'no-console': 'warn',
     'no-debugger': 'warn',
     'semi': ['warn', 'never'],
-    'no-unused-vars': 'warn'
+    'no-unused-vars': 'warn',
+    'indent': ['warn', 2],
+    'quotes': ['warn', 'single', {
+      'allowTemplateLiterals': true,
+      'avoidEscape': true
+    }],
+    'no-empty': 'warn'
+
   },
   parserOptions: {
     "ecmaVersion": 6,

@@ -17,9 +17,21 @@ context('ui.js', () => {
       expect(input).to.have.attr('value', '127')
     })
 
-    it('creates a matching label', () => {
-      const label = document.querySelector('[for="testVar"]')
-      expect(label).to.be.ok
+    describe('creates a label', () => {
+      it("for attribute matches the input's ID", () => {
+        const label = document.querySelector('[for="testVar"]')
+        expect(label).to.be.ok
+      })
+
+      it("label's text matches variable name", () => {
+        const label = document.querySelector('[for="testVar"]')
+        expect(label).to.have.text('testVar')
+      })
+
+      it('adds a span with the variable value', () => {
+        const span = document.querySelector('[for="testVar"] span')
+        expect(span).to.have.text('127')
+      })
     })
   })
 

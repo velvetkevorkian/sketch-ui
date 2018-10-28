@@ -25,6 +25,11 @@ label {
   margin-bottom: 0.5em;
 }
 
+label span::before {
+  content: ':';
+  margin-right: 0.5em;
+}
+
 input {
   margin-bottom: 0.5em;
 }
