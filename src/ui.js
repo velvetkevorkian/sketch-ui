@@ -9,10 +9,21 @@ class UI {
 
     Object.entries(object).forEach(item => {
       const name = item[0]
-      const config = item[1]
+      let attrs = item[1]
+
+      if(attrs.type === undefined) attrs.type = 'range'
+
+      const defaults = this.defaultSettings(attrs.type)
+      if(defaults) {
+        Object.entries(defaults).forEach(def => {
+          if(attrs[def[0]] === undefined) {
+            attrs[def[0]] = def[1]
+          }
+        })
+      }
 
       panel.appendChild(this.buildLabel(name))
-      panel.appendChild(this.buildInput(name, config))
+      panel.appendChild(this.buildInput(name, attrs))
     })
   }
 
@@ -48,11 +59,9 @@ class UI {
     let input = document.createElement('input')
     input.setAttribute('id', name)
 
-    if(config.type === undefined) config.type = 'range'
-    const attrs = Object.assign(this.defaultSettings(config.type), config)
     document.querySelector(`[for=${name}] span`).innerHTML = config.value
 
-    Object.entries(attrs).forEach(attr => {
+    Object.entries(config).forEach(attr => {
       const attrName = attr[0]
       const value = attr[1]
       input.setAttribute(attrName, value)
@@ -60,8 +69,7 @@ class UI {
 
     input.addEventListener('input', event => {
       const newValue = event.target.value
-      config.value = newValue
-      document.querySelector(`[for=${name}] span`).innerHTML = newValue
+      this.setSetting(name, newValue)
     })
 
     return input
@@ -74,8 +82,20 @@ class UI {
   }
 
   setSetting(key, value) {
-    this.config[key].value = value
-    document.getElementById(key).value = value
+    const obj = this.config[key]
+    const min = obj.min
+    const max = obj.max
+    let newValue = value
+
+    if(obj.type == 'number' || obj.type == 'range') {
+      newValue = parseFloat(newValue)
+      if((min !== undefined) && newValue < min) newValue = min
+      if((max !== undefined) && newValue > max) newValue = max
+    }
+
+    this.config[key].value = newValue
+    document.getElementById(key).value = newValue
+    document.querySelector(`[for=${key}] span`).innerHTML = newValue
   }
 
   var(key, value = null) {

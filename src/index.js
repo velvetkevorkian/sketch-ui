@@ -8,7 +8,7 @@ let state = {
     type: 'color'
   },
   strokeAlpha: {
-    value: 10
+    value: 100
   },
   backgroundColor: {
     value: '#202020',
@@ -17,6 +17,9 @@ let state = {
   diameter: {
     value: 50,
     max: 500
+  },
+  step: {
+    value: 5,
   }
 }
 
@@ -36,14 +39,17 @@ new p5(p => {
 
   p.draw = () => {
     p.noFill()
-    const str = p.color(ui.getSetting('strokeColor'))
+    const str = p.color(ui.var('strokeColor'))
     str.setAlpha(ui.var('strokeAlpha'))
     p.stroke(str)
     p.ellipse(p.windowWidth/2, p.windowHeight/2, ui.var('diameter'))
+
+    // const newDiameter = ui.var('diameter') + p.map(p.noise(Date.now()), 0, 1, ui.var('step') * -0.5, ui.var('step') * 0.5)
+    // ui.var('diameter', newDiameter)
   }
 
   p.doubleClicked = () => {
-    p.background(ui.getSetting('backgroundColor'))
-    ui.var('diameter', 50)
+    p.background(ui.var('backgroundColor'))
+    ui.var('diameter', 250)
   }
 })

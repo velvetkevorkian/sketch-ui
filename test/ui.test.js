@@ -25,7 +25,7 @@ context('ui.js', () => {
 
       it("label's text matches variable name", () => {
         const label = document.querySelector('[for="testVar"]')
-        expect(label).to.have.text('testVar')
+        expect(label).to.contain.text('testVar')
       })
 
       it('adds a span with the variable value', () => {
@@ -41,8 +41,20 @@ context('ui.js', () => {
     })
 
     it('can set a value', () => {
-      ui.var('testVar', 1000)
-      expect(ui.var('testVar')).to.equal(1000)
+      ui.var('testVar', 200)
+      expect(ui.var('testVar')).to.equal(200)
+    })
+
+    describe('respects limits', () => {
+      it("won't set < min", () => {
+        ui.var('testVar', -1000)
+        expect(ui.var('testVar')).to.equal(0)
+      })
+
+      it("won't set > max", () => {
+        ui.var('testVar', 1000)
+        expect(ui.var('testVar')).to.equal(255)
+      })
     })
   })
 
