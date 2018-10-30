@@ -20,7 +20,7 @@ let state = {
     value: 5,
   },
   animate: {
-    value: false
+    value: true
   }
 }
 

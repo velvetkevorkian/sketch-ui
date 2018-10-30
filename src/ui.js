@@ -71,17 +71,18 @@ class UI {
 
     document.querySelector(`[for=${name}] span`).innerHTML = config.value
 
-    if(config.type == 'checkbox') {
-      if(config.value == true) {
-        input.setAttribute('checked', config.value)
-      }
-    }
-
     Object.entries(config).forEach(attr => {
       const attrName = attr[0]
       const value = attr[1]
       input.setAttribute(attrName, value)
     })
+
+    if(config.type == 'checkbox') {
+      input.removeAttribute('value')
+      if(config.value == true) {
+        input.setAttribute('checked', config.value)
+      }
+    }
 
     input.addEventListener('input', event => {
       let newValue
@@ -110,14 +111,17 @@ class UI {
       newValue = parseFloat(newValue)
       if((min !== undefined) && newValue < min) newValue = min
       if((max !== undefined) && newValue > max) newValue = max
-    } else if(obj.type == 'checkbox') {
+    }
+
+    if(obj.type == 'checkbox') {
       if(value == true) {
         document.getElementById(key).checked = true
       } else document.getElementById(key).removeAttribute('checked')
+    } else {
+      document.getElementById(key).value = newValue
     }
 
     this.config[key].value = newValue
-    document.getElementById(key).value = newValue
     document.querySelector(`[for=${key}] span`).innerHTML = newValue
   }
 
