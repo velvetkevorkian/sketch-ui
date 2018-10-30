@@ -25,12 +25,11 @@ let state = {
 }
 
 new p5(p => {
-  let ui, v
+  let v
 
   p.setup = () => {
     p.createCanvas(p.windowWidth, p.windowHeight)
-    ui = new UI(state)
-    v = ui.proxy()
+    v = new UI(state).proxy
     p.background(v.backgroundColor)
   }
 
@@ -48,12 +47,12 @@ new p5(p => {
 
     if(v.animate) {
       const newDiameter = v.diameter + p.map(p.noise(Date.now()), 0, 1, v.step * -0.5, v.step * 0.5)
-      ui.var('diameter', newDiameter)
+      v.diameter = newDiameter
     }
   }
 
   p.doubleClicked = () => {
     p.background(v.backgroundColor)
-    ui.var('diameter', 250)
+    v.diameter, 250
   }
 })

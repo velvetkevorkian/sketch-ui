@@ -35,25 +35,29 @@ context('ui.js', () => {
     })
   })
 
-  describe('getting and setting works using var()', () => {
+  describe('getting and setting works', () => {
+    beforeEach(() => {
+      ui = new UI({testVar: {value: 127}}).proxy
+    })
+
     it('can get a value', () => {
-      expect(ui.var('testVar')).to.equal(127)
+      expect(ui.testVar).to.equal(127)
     })
 
     it('can set a value', () => {
-      ui.var('testVar', 200)
-      expect(ui.var('testVar')).to.equal(200)
+      ui.testVar = 200
+      expect(ui.testVar).to.equal(200)
     })
 
     describe('respects limits', () => {
       it("won't set < min", () => {
-        ui.var('testVar', -1000)
-        expect(ui.var('testVar')).to.equal(0)
+        ui.testVar = -1000
+        expect(ui.testVar).to.equal(0)
       })
 
       it("won't set > max", () => {
-        ui.var('testVar', 1000)
-        expect(ui.var('testVar')).to.equal(255)
+        ui.testVar = 1000
+        expect(ui.testVar).to.equal(255)
       })
     })
   })
