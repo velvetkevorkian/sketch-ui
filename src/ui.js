@@ -4,6 +4,14 @@ class UI {
     this.createUI(this.config)
   }
 
+  proxy() {
+    return new Proxy(this.config, {
+      get: (obj, prop) => {
+        return obj[prop].value
+      }
+    })
+  }
+
   createUI(object) {
     const panel = this.buildPanel()
 
@@ -101,6 +109,7 @@ class UI {
     else return this.config[key].value
   }
 
+  // TODO: naming is confusing here
   setSetting(key, value) {
     const obj = this.config[key]
     const min = obj.min
