@@ -4,15 +4,13 @@ import UI from './ui.js'
 
 let state = {
   strokeColor: {
-    value: '#ff0000',
-    type: 'color'
+    value: '#ff0000'
   },
   strokeAlpha: {
     value: 100
   },
   backgroundColor: {
-    value: '#202020',
-    type: 'color'
+    value: '#202020'
   },
   diameter: {
     value: 50,
@@ -20,6 +18,9 @@ let state = {
   },
   step: {
     value: 5,
+  },
+  animate: {
+    value: false
   }
 }
 
@@ -44,8 +45,10 @@ new p5(p => {
     p.stroke(str)
     p.ellipse(p.windowWidth/2, p.windowHeight/2, ui.var('diameter'))
 
-    // const newDiameter = ui.var('diameter') + p.map(p.noise(Date.now()), 0, 1, ui.var('step') * -0.5, ui.var('step') * 0.5)
-    // ui.var('diameter', newDiameter)
+    if(ui.var('animate') === true) {
+      const newDiameter = ui.var('diameter') + p.map(p.noise(Date.now()), 0, 1, ui.var('step') * -0.5, ui.var('step') * 0.5)
+      ui.var('diameter', newDiameter)
+    }
   }
 
   p.doubleClicked = () => {

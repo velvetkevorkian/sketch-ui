@@ -11,7 +11,9 @@ class UI {
       const name = item[0]
       let attrs = item[1]
 
-      if(attrs.type === undefined) attrs.type = 'range'
+      if(attrs.type === undefined) {
+        attrs.type = this.inferType(attrs.value)
+      }
 
       const defaults = this.defaultSettings(attrs.type)
       if(defaults) {
@@ -25,6 +27,14 @@ class UI {
       panel.appendChild(this.buildLabel(name))
       panel.appendChild(this.buildInput(name, attrs))
     })
+  }
+
+  inferType(value) {
+    if(value[0] == '#' && value.length == 7) return 'color'
+    if(typeof value == 'number') return 'range'
+    if(typeof value == 'boolean') return 'checkbox'
+
+    else return 'text'
   }
 
   buildPanel() {
@@ -61,6 +71,12 @@ class UI {
 
     document.querySelector(`[for=${name}] span`).innerHTML = config.value
 
+    if(config.type == 'checkbox') {
+      if(config.value == true) {
+        input.setAttribute('checked', config.value)
+      }
+    }
+
     Object.entries(config).forEach(attr => {
       const attrName = attr[0]
       const value = attr[1]
@@ -68,7 +84,10 @@ class UI {
     })
 
     input.addEventListener('input', event => {
-      const newValue = event.target.value
+      let newValue
+      if(config.type == 'checkbox') {
+        newValue = event.target.checked
+      } else newValue = event.target.value
       this.setSetting(name, newValue)
     })
 
@@ -91,6 +110,10 @@ class UI {
       newValue = parseFloat(newValue)
       if((min !== undefined) && newValue < min) newValue = min
       if((max !== undefined) && newValue > max) newValue = max
+    } else if(obj.type == 'checkbox') {
+      if(value == true) {
+        document.getElementById(key).checked = true
+      } else document.getElementById(key).removeAttribute('checked')
     }
 
     this.config[key].value = newValue
