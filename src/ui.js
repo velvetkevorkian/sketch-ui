@@ -2,10 +2,10 @@ class UI {
   constructor(config) {
     this.config = config
     this.createUI(this.config)
-    this.proxy = this.proxy()
+    this.proxy = this.createProxy()
   }
 
-  proxy() {
+  createProxy() {
     return new Proxy(this.config, {
       get: (obj, prop) => {
         return obj[prop].value
@@ -27,12 +27,10 @@ class UI {
 
   updateField(prop, value) {
     const type = this.config[prop].type
+    const el = document.getElementById(prop)
     if(type === 'checkbox') {
-      const el = document.getElementById(prop)
       value === true ? el.checked = true : el.removeAttribute('checked')
-    } else {
-      document.getElementById(prop).value = value
-    }
+    } else el.value = value
 
     document.querySelector(`[for=${prop}] span`).innerHTML = value
   }
@@ -40,33 +38,23 @@ class UI {
   createUI(object) {
     const panel = this.buildPanel()
 
-    Object.entries(object).forEach(item => {
-      const name = item[0]
-      let attrs = item[1]
+    for(let item in object) {
+      let attrs = object[item]
 
-      if(attrs.type === undefined) {
-        attrs.type = this.inferType(attrs.value)
-      }
+      if(!attrs.type) attrs.type = this.inferType(attrs.value)
 
       const defaults = this.defaultSettings(attrs.type)
-      if(defaults) {
-        Object.entries(defaults).forEach(def => {
-          if(attrs[def[0]] === undefined) {
-            attrs[def[0]] = def[1]
-          }
-        })
-      }
+      object[item] = Object.assign(defaults, attrs)
 
-      panel.appendChild(this.buildLabel(name))
-      panel.appendChild(this.buildInput(name, attrs))
-    })
+      panel.appendChild(this.buildLabel(item))
+      panel.appendChild(this.buildInput(item, object[item]))
+    }
   }
 
   inferType(value) {
     if(value[0] == '#' && value.length == 7) return 'color'
     if(typeof value == 'number') return 'range'
     if(typeof value == 'boolean') return 'checkbox'
-
     else return 'text'
   }
 
@@ -104,11 +92,9 @@ class UI {
 
     document.querySelector(`[for=${name}] span`).innerHTML = config.value
 
-    Object.entries(config).forEach(attr => {
-      const attrName = attr[0]
-      const value = attr[1]
-      input.setAttribute(attrName, value)
-    })
+    for(let attr in config) {
+      input.setAttribute(attr, config[attr])
+    }
 
     if(config.type == 'checkbox') {
       input.removeAttribute('value')
