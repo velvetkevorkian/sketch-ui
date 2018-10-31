@@ -25,6 +25,13 @@ label {
   margin-bottom: 0.5em;
 }
 
+label span {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 6em;
+  overflow: hidden;
+}
+
 label span::before {
   content: ':';
   margin-right: 0.5em;
