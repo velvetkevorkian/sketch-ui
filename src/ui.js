@@ -44,7 +44,7 @@ class UI {
       if(!attrs.type) attrs.type = this.inferType(attrs.value)
 
       const defaults = this.defaultSettings(attrs.type)
-      object[item] = Object.assign(defaults, attrs)
+      object[item] = {...defaults, ...attrs}
 
       panel.appendChild(this.buildLabel(item))
       panel.appendChild(this.buildInput(item, object[item]))
