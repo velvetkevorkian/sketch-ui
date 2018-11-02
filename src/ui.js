@@ -3,6 +3,7 @@ class UI {
     this.config = config
     this.createUI(this.config)
     this.proxy = this.createProxy()
+    window.dispatchEvent(new Event('proxy-ready'))
   }
 
   createProxy() {
@@ -55,6 +56,7 @@ class UI {
     if(value[0] == '#' && value.length == 7) return 'color'
     if(typeof value == 'number') return 'range'
     if(typeof value == 'boolean') return 'checkbox'
+    if(Array.isArray(value)) return 'select'
     else return 'text'
   }
 
@@ -87,6 +89,8 @@ class UI {
   }
 
   buildInput(name, config) {
+    if(config.type === 'select') return this.buildSelect(name, config)
+
     let input = document.createElement('input')
     input.setAttribute('id', name)
 
@@ -112,6 +116,29 @@ class UI {
     })
 
     return input
+  }
+
+  buildSelect(name, config) {
+    let select = document.createElement('select')
+    select.setAttribute('id', name)
+    config.value.forEach(val => {
+      let option = document.createElement('option')
+      option.setAttribute('value', val)
+      option.appendChild(document.createTextNode(val))
+      select.appendChild(option)
+    })
+
+    document.querySelector(`[for=${name}] span`).innerHTML = config.value[0]
+
+    window.addEventListener('proxy-ready', () => {
+      this.proxy[name] = config.value[0]
+    })
+
+    select.addEventListener('input', event => {
+      this.proxy[name] = event.target.value
+    })
+
+    return select
   }
 }
 

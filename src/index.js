@@ -21,6 +21,9 @@ let state = {
   },
   animate: {
     value: false
+  },
+  option: {
+    value: ['one', 'two', 'three']
   }
 }
 
