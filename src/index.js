@@ -20,7 +20,10 @@ let state = {
     value: 5,
   },
   animate: {
-    value: false
+    value: false,
+    callback: function(val, p) {
+      val == true ? p.loop() : p.noLoop()
+    }
   },
   option: {
     value: ['one', 'two', 'three']
@@ -28,12 +31,12 @@ let state = {
 }
 
 new p5(p => {
-  let v
+  const v = new UI(state, p).proxy
 
   p.setup = () => {
     p.createCanvas(p.windowWidth, p.windowHeight)
-    v = new UI(state).proxy
     p.background(v.backgroundColor)
+    p.noLoop()
   }
 
   p.windowResized = () => {
@@ -48,10 +51,8 @@ new p5(p => {
     p.stroke(str)
     p.ellipse(p.windowWidth/2, p.windowHeight/2, v.diameter)
 
-    if(v.animate) {
-      const newDiameter = v.diameter + p.map(p.noise(Date.now()), 0, 1, v.step * -0.5, v.step * 0.5)
-      v.diameter = newDiameter
-    }
+    const newDiameter = v.diameter + p.map(p.noise(Date.now()), 0, 1, v.step * -0.5, v.step * 0.5)
+    v.diameter = newDiameter
   }
 
   p.doubleClicked = () => {

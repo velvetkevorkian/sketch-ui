@@ -1,6 +1,7 @@
 class UI {
-  constructor(config) {
+  constructor(config, p5) {
     this.config = config
+    this.p5 = p5
     this.createUI(this.config)
     this.proxy = this.createProxy()
     window.dispatchEvent(new Event('proxy-ready'))
@@ -15,6 +16,7 @@ class UI {
         value = this.validate(obj, prop, value)
         obj[prop].value = value
         this.updateField(prop, value)
+        if(obj[prop].callback) obj[prop].callback(value, this.p5)
         return true
       }
     })
