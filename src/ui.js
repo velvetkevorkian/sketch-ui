@@ -7,8 +7,13 @@ class UI {
     window.dispatchEvent(new Event('proxy-ready'))
   }
 
+  destroy() {
+    this.proxy.revoke()
+    document.getElementById('ui').remove()
+  }
+
   createProxy() {
-    return new Proxy(this.config, {
+    return Proxy.revocable(this.config, {
       get: (obj, prop) => {
         return obj[prop].value
       },
@@ -19,7 +24,7 @@ class UI {
         if(obj[prop].callback) obj[prop].callback(value, this.p5)
         return true
       }
-    })
+    }).proxy
   }
 
   validate(obj, prop, value) {
@@ -55,7 +60,7 @@ class UI {
   }
 
   inferType(value) {
-    if(value[0] == '#' && value.length == 7) return 'color'
+    if(typeof value == 'string' && value[0] == '#' && value.length == 7) return 'color'
     if(typeof value == 'number') return 'range'
     if(typeof value == 'boolean') return 'checkbox'
     if(Array.isArray(value)) return 'select'
@@ -98,8 +103,11 @@ class UI {
 
     document.querySelector(`[for=${name}] span`).innerHTML = config.value
 
+    const exclusions = ['callback']
     for(let attr in config) {
-      input.setAttribute(attr, config[attr])
+      if(!exclusions.includes(attr)) {
+        input.setAttribute(attr, config[attr])
+      }
     }
 
     if(config.type == 'checkbox') {

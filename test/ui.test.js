@@ -7,7 +7,7 @@ context('ui.js', () => {
     ui = new UI({testVar: {value: 127}})
   })
 
-  describe('creates UI elements', () => {
+  describe('creates basic UI elements', () => {
     it('creates the panel', () => {
       expect(document.getElementById('ui')).to.be.ok
     })
@@ -35,7 +35,21 @@ context('ui.js', () => {
     })
   })
 
-  describe('getting and setting works', () => {
+  describe('creates selects', () => {
+    beforeEach(() => {
+      ui = new UI({testArray: {value: ['one', 'two']}})
+    })
+
+    it('creates the select', () => {
+      expect(document.querySelector('select#testArray')).to.be.ok
+    })
+
+    it('creates options', () => {
+      expect(document.querySelector('option').value).to.equal('one')
+    })
+  })
+
+  describe('getting and setting via proxy works', () => {
     beforeEach(() => {
       ui = new UI({testVar: {value: 127}}).proxy
     })
@@ -47,6 +61,18 @@ context('ui.js', () => {
     it('can set a value', () => {
       ui.testVar = 200
       expect(ui.testVar).to.equal(200)
+    })
+
+    it('updates the field', () => {
+      ui.testVar = 200
+      const input = document.querySelector('#testVar')
+      expect(input.value).to.equal('200')
+    })
+
+    it('updates the span', () => {
+      ui.testVar = 200
+      const span = document.querySelector('[for="testVar"] span')
+      expect(span).to.have.text('200')
     })
 
     describe('respects limits', () => {
@@ -73,6 +99,10 @@ context('ui.js', () => {
 
     it('checkbox if boolean', () => {
       expect(ui.inferType(true)).to.equal('checkbox')
+    })
+
+    it('select if array', () => {
+      expect(ui.inferType(['one', 'two'])).to.equal('select')
     })
 
     it('falls back to text', () => {
