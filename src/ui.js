@@ -3,12 +3,18 @@ class UI {
     this.config = config
     this.context = context
     this.createUI(this.config)
-    this.proxy = this.createProxy()
-    window.dispatchEvent(new Event('proxy-ready'))
+    this.revocable = this.createProxy()
+    this.proxy = this.revocable.proxy
+    document.dispatchEvent(new Event('proxy-ready'))
+  }
+
+  destroy() {
+    document.getElementById('ui').remove()
+    this.revocable.revoke()
   }
 
   createProxy() {
-    return new Proxy(this.config, {
+    return Proxy.revocable(this.config, {
       get: (obj, prop) => {
         return obj[prop].value
       },
@@ -135,9 +141,9 @@ class UI {
 
     document.querySelector(`[for=${name}] span`).innerHTML = config.value[0]
 
-    window.addEventListener('proxy-ready', () => {
+    document.addEventListener('proxy-ready', () => {
       this.proxy[name] = config.value[0]
-    })
+    }, {once: true})
 
     select.addEventListener('input', event => {
       this.proxy[name] = event.target.value

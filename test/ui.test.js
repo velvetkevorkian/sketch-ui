@@ -3,9 +3,12 @@ import UI from '@/ui.js'
 context('ui.js', () => {
   let ui
 
-  //TODO: clean up afterwards
   beforeEach(() => {
     ui = new UI({testVar: {value: 127}})
+  })
+
+  afterEach(() => {
+    ui.destroy()
   })
 
   describe('creates basic UI elements', () => {
@@ -41,6 +44,8 @@ context('ui.js', () => {
       ui = new UI({testArray: {value: ['one', 'two']}})
     })
 
+    afterEach(() => ui.destroy())
+
     it('creates the select', () => {
       expect(document.querySelector('select#testArray')).to.be.ok
     })
@@ -49,16 +54,15 @@ context('ui.js', () => {
       expect(document.querySelector('option').value).to.equal('one')
     })
 
-    it.skip('creates the right number of options', () => {
+    it('creates the right number of options', () => {
       expect(document.querySelectorAll('option').length).to.equal(2)
     })
   })
 
   describe('getting and setting via proxy works', () => {
     let proxy
-    beforeEach(() => {
-      proxy = ui.proxy
-    })
+
+    beforeEach(() => {proxy = ui.proxy})
 
     it('can get a value', () => {
       expect(proxy.testVar).to.equal(127)
@@ -126,14 +130,14 @@ context('ui.js', () => {
         callback: function(val, context) {
           context.called = true
         }
-      }}, context).proxy
+      }}, context)
     })
 
+    afterEach(() => ui.destroy())
+
     it('calls the callback', () => {
-      ui.testVar = 200
+      ui.proxy.testVar = 200
       expect(context.called).to.be.true
     })
   })
-
-
 })
