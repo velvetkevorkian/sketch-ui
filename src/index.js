@@ -31,9 +31,11 @@ let state = {
 }
 
 new p5(p => {
-  const v = new UI(state, p).proxy
+  let ui, v
 
   p.setup = () => {
+    ui = new UI(state, p)
+    v = ui.proxy
     p.createCanvas(p.windowWidth, p.windowHeight)
     p.background(v.backgroundColor)
     p.noLoop()
@@ -56,7 +58,7 @@ new p5(p => {
   }
 
   p.doubleClicked = () => {
-    p.background(v.backgroundColor)
     v.diameter, 250
+    p.background(v.backgroundColor)
   }
 })

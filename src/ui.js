@@ -1,19 +1,14 @@
 class UI {
-  constructor(config, p5) {
+  constructor(config, context) {
     this.config = config
-    this.p5 = p5
+    this.context = context
     this.createUI(this.config)
     this.proxy = this.createProxy()
     window.dispatchEvent(new Event('proxy-ready'))
   }
 
-  destroy() {
-    this.proxy.revoke()
-    document.getElementById('ui').remove()
-  }
-
   createProxy() {
-    return Proxy.revocable(this.config, {
+    return new Proxy(this.config, {
       get: (obj, prop) => {
         return obj[prop].value
       },
@@ -21,10 +16,10 @@ class UI {
         value = this.validate(obj, prop, value)
         obj[prop].value = value
         this.updateField(prop, value)
-        if(obj[prop].callback) obj[prop].callback(value, this.p5)
+        if(obj[prop].callback) obj[prop].callback(value, this.context)
         return true
       }
-    }).proxy
+    })
   }
 
   validate(obj, prop, value) {

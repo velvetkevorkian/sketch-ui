@@ -3,6 +3,7 @@ import UI from '@/ui.js'
 context('ui.js', () => {
   let ui
 
+  //TODO: clean up afterwards
   beforeEach(() => {
     ui = new UI({testVar: {value: 127}})
   })
@@ -44,46 +45,51 @@ context('ui.js', () => {
       expect(document.querySelector('select#testArray')).to.be.ok
     })
 
-    it('creates options', () => {
+    it('creates options with the right value', () => {
       expect(document.querySelector('option').value).to.equal('one')
+    })
+
+    it.skip('creates the right number of options', () => {
+      expect(document.querySelectorAll('option').length).to.equal(2)
     })
   })
 
   describe('getting and setting via proxy works', () => {
+    let proxy
     beforeEach(() => {
-      ui = new UI({testVar: {value: 127}}).proxy
+      proxy = ui.proxy
     })
 
     it('can get a value', () => {
-      expect(ui.testVar).to.equal(127)
+      expect(proxy.testVar).to.equal(127)
     })
 
     it('can set a value', () => {
-      ui.testVar = 200
-      expect(ui.testVar).to.equal(200)
+      proxy.testVar = 200
+      expect(proxy.testVar).to.equal(200)
     })
 
     it('updates the field', () => {
-      ui.testVar = 200
+      proxy.testVar = 200
       const input = document.querySelector('#testVar')
       expect(input.value).to.equal('200')
     })
 
     it('updates the span', () => {
-      ui.testVar = 200
+      proxy.testVar = 200
       const span = document.querySelector('[for="testVar"] span')
       expect(span).to.have.text('200')
     })
 
     describe('respects limits', () => {
       it("won't set < min", () => {
-        ui.testVar = -1000
-        expect(ui.testVar).to.equal(0)
+        proxy.testVar = -1000
+        expect(proxy.testVar).to.equal(0)
       })
 
       it("won't set > max", () => {
-        ui.testVar = 1000
-        expect(ui.testVar).to.equal(255)
+        proxy.testVar = 1000
+        expect(proxy.testVar).to.equal(255)
       })
     })
   })
@@ -107,6 +113,25 @@ context('ui.js', () => {
 
     it('falls back to text', () => {
       expect(ui.inferType('blah')).to.equal('text')
+    })
+  })
+
+  describe('passing a callback works', () => {
+    let context
+
+    beforeEach(() => {
+      context = {called: false}
+      ui = new UI({testVar: {
+        value: 127,
+        callback: function(val, context) {
+          context.called = true
+        }
+      }}, context).proxy
+    })
+
+    it('calls the callback', () => {
+      ui.testVar = 200
+      expect(context.called).to.be.true
     })
   })
 
