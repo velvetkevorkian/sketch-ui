@@ -2,13 +2,15 @@ import UI from '@/ui.js'
 
 context('ui.js', () => {
   let ui
+  let destroyed = false
 
   beforeEach(() => {
     ui = new UI({testVar: {value: 127}})
   })
 
   afterEach(() => {
-    ui.destroy()
+    if(!destroyed) ui.destroy()
+    destroyed = false
   })
 
   describe('creates basic UI elements', () => {
@@ -36,6 +38,13 @@ context('ui.js', () => {
         const span = document.querySelector('[for="testVar"] span')
         expect(span).to.have.text('127')
       })
+    })
+
+    it('cleans up after itself', () => {
+      destroyed = true
+      ui.destroy()
+      const html = `<head><meta charset="utf-8"></head><body></body>`
+      expect(document.documentElement.innerHTML).to.equal(html)
     })
   })
 
@@ -125,6 +134,7 @@ context('ui.js', () => {
 
     beforeEach(() => {
       context = {called: false}
+
       ui = new UI({testVar: {
         value: 127,
         callback: function(val, context) {
