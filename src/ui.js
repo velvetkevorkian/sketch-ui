@@ -1,4 +1,4 @@
-class UI {
+export default class UI {
   constructor(config, context) {
     this.config = config
     this.context = context
@@ -15,9 +15,7 @@ class UI {
 
   createProxy() {
     return Proxy.revocable(this.config, {
-      get: (obj, prop) => {
-        return obj[prop].value
-      },
+      get: (obj, prop) =>  obj[prop].value,
       set: (obj, prop, value) => {
         value = this.validate(obj, prop, value)
         obj[prop].value = value
@@ -152,5 +150,3 @@ class UI {
     return select
   }
 }
-
-export default UI
