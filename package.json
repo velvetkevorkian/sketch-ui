@@ -1,11 +1,9 @@
 {
-  "name": "webpack-test",
-  "version": "1.0.0",
+  "name": "@velvetkevorkian/sketch-ui",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
-  "dependencies": {
-    "p5": "^0.7.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-dom": "^1.8.1",
@@ -29,6 +27,6 @@
     "test:watch": "mocha-webpack --watch --opts test/mocha.opts"
   },
   "keywords": [],
-  "author": "",
+  "author": "Kyle Macquarrie",
   "license": "ISC"
 }
