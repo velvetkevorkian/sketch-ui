@@ -1,3 +1,5 @@
+import './index.css'
+
 export default class UI {
   constructor(config, context) {
     this.config = config

@@ -1,4 +1,4 @@
---webpack-config webpack.production.js
+--webpack-config webpack.config.js
 --require jsdom-global/register
 -- recursive
 --require test/setup.js

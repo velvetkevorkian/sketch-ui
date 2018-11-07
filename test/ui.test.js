@@ -43,8 +43,7 @@ context('ui.js', () => {
     it('cleans up after itself', () => {
       destroyed = true
       ui.destroy()
-      const html = `<head><meta charset="utf-8"></head><body></body>`
-      expect(document.documentElement.innerHTML).to.equal(html)
+      expect(document.body.innerHTML).to.equal('')
     })
   })
 
