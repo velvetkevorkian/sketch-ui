@@ -1,6 +1,6 @@
 {
   "name": "@velvetkevorkian/sketch-ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generate a UI for your creative coding sketches with minimal configuration.",
   "main": "src/ui.js",
   "dependencies": {},
