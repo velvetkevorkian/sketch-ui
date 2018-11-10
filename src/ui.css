@@ -1,0 +1,50 @@
+#ui, #ui * {
+  box-sizing: border-box;
+}
+
+#ui {
+  background: rgba(200, 200, 200, 0.7);
+  font-family: monospace, sans-serif;
+  padding: 1em;
+  position: fixed;
+  top: 1em;
+  left: 1em;
+  opacity: 0.5;
+  transition: 100ms opacity;
+}
+
+#ui:hover {
+  opacity: 1;
+}
+
+label {
+  display: block;
+  font-size: 0.8em;
+  margin-bottom: 0.5em;
+}
+
+label span {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 6em;
+  overflow: hidden;
+}
+
+label span::before {
+  content: ':';
+  margin-right: 0.5em;
+}
+
+input, select {
+  margin-bottom: 1em;
+}
+
+input + label, select + label {
+  border-top: 1px solid rgb(180, 180, 180);
+  padding-top: 1em;
+}
+
+button {
+  font-family: inherit;
+  padding: 0.5em;
+}
