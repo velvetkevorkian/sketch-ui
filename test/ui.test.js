@@ -34,6 +34,18 @@ context('ui.js', () => {
         expect(label).to.contain.text('testVar')
       })
 
+      describe('label', () => {
+        beforeEach(() => {
+          ui.destroy()
+          ui = new UI({testVar: {value: 127, label: 'My test variable'}})
+        })
+
+        it('can be custom', () => {
+          const label = document.querySelector('[for="testVar"]')
+          expect(label).to.contain.text('My test variable')
+        })
+      })
+
       it('adds a span with the variable value', () => {
         const span = document.querySelector('[for="testVar"] span')
         expect(span).to.have.text('127')
@@ -149,4 +161,29 @@ context('ui.js', () => {
       expect(context.called).to.be.true
     })
   })
+
+  describe('creates buttons', () => {
+    let context
+
+    beforeEach(() => {
+      context = {called: false}
+      ui = new UI({button: {
+        type: 'button',
+        callback: function(context) {
+          context.called = true
+        }
+      }}, context)
+    })
+
+    afterEach(() => ui.destroy())
+
+    it('calls the callback when clicked', () => {
+      const evt = new Event('click')
+      const button = document.getElementById('button')
+      button.dispatchEvent(evt)
+      expect(context.called).to.be.true
+    })
+  })
+
+
 })

@@ -1,4 +1,4 @@
-import './index.css'
+import './ui.css'
 
 export default class UI {
   constructor(config, context) {
@@ -55,7 +55,9 @@ export default class UI {
       const defaults = this.defaultSettings(attrs.type)
       object[item] = {...defaults, ...attrs}
 
-      panel.appendChild(this.buildLabel(item))
+      if(attrs.type != 'button') {
+        panel.appendChild(this.buildLabel(item, object[item].label))
+      }
       panel.appendChild(this.buildInput(item, object[item]))
     }
   }
@@ -75,10 +77,10 @@ export default class UI {
     return panel
   }
 
-  buildLabel(name) {
+  buildLabel(name, text = name) {
     const label = document.createElement('label')
     label.setAttribute('for', name)
-    label.appendChild(document.createTextNode(name))
+    label.appendChild(document.createTextNode(text))
     label.appendChild(document.createElement('span'))
     return label
   }
@@ -97,6 +99,7 @@ export default class UI {
   }
 
   buildInput(name, config) {
+    if(config.type === 'button') return this.buildButton(name, config)
     if(config.type === 'select') return this.buildSelect(name, config)
 
     let input = document.createElement('input')
@@ -127,6 +130,23 @@ export default class UI {
     })
 
     return input
+  }
+
+  buildButton(name, config) {
+    const button = document.createElement('button')
+    button.setAttribute('id', name)
+    button.innerHTML = config.label ? config.label : name
+    if(config.callback) {
+      button.addEventListener('click', event => {
+        event.preventDefault()
+        config.callback(this.context)
+      })
+    }
+
+    const div = document.createElement('div')
+    div.appendChild(button)
+
+    return div
   }
 
   buildSelect(name, config) {

@@ -92,6 +92,10 @@ will result in
 ### Callbacks
 
 ## To Do
+- [ ] show/hide UI
+- [ ] save to localstorage
+- [ ] fieldsets
+- [ ] multiple UIs?
 - [ ] document callbacks
 - [ ] use with script tag only
 - [ ] worked examples
