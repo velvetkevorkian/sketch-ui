@@ -92,7 +92,6 @@ will result in
 ### Callbacks
 
 ## To Do
-- [ ] show/hide UI
 - [ ] save to localstorage
 - [ ] fieldsets
 - [ ] multiple UIs?
@@ -103,3 +102,4 @@ will result in
 - [ ] browser testing
 - [ ] transpile/minify?
 - [ ] should style loader be a prod dependency?
+- [ ] less flaky jsdom setup

@@ -52,6 +52,14 @@ context('ui.js', () => {
       })
     })
 
+    it('can be hidden', () => {
+      const toggle = document.getElementById('ui-toggle')
+      const event = new Event('click')
+      toggle.dispatchEvent(event)
+      const panel = document.getElementById('ui')
+      expect(panel).to.have.class('hidden')
+    })
+
     it('cleans up after itself', () => {
       destroyed = true
       ui.destroy()

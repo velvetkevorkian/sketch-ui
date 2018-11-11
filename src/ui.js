@@ -73,6 +73,11 @@ export default class UI {
   buildPanel(id = 'ui') {
     const panel = document.createElement('div')
     panel.setAttribute('id', id)
+    const toggle = document.createElement('button')
+    toggle.innerHTML = 'Toggle UI'
+    toggle.setAttribute('id', 'ui-toggle')
+    toggle.addEventListener('click', () => { panel.classList.toggle('hidden') })
+    panel.appendChild(toggle)
     document.body.appendChild(panel)
     return panel
   }
