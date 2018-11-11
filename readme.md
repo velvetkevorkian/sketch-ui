@@ -1,10 +1,13 @@
 # sketch-ui
 
+__Warning: extremely early version. Breaking changes will happen.__
+
 Generate a UI for tweaking the variables in your creative coding sketches with minimal configuration, using standard HTML inputs.
 
-Designed for use with [p5.js](https://p5js.org/) but not bound to any library or framework.
+Designed for use with [p5.js](https://p5js.org/) but not bound to any library or framework.  
 
 ## Installation
+The examples currently assume you're using Webpack to build your JS and CSS.
 Add it to your project:
 ```shell
 npm install @velvetkevorkian/sketch-ui
@@ -14,6 +17,7 @@ npm install @velvetkevorkian/sketch-ui
 
 ```javascript
 import UI from '@velvetkevorkian/sketch-ui'
+import '@velvetkevorkian/sketch-ui/src/ui.css'
 
 // declare our variables object.
 const vars = {
@@ -101,5 +105,4 @@ will result in
 - [ ] theming/styling
 - [ ] browser testing
 - [ ] transpile/minify?
-- [ ] should style loader be a prod dependency?
 - [ ] less flaky jsdom setup
