@@ -8,6 +8,7 @@ Designed for use with [p5.js](https://p5js.org/) but not bound to any library or
 
 ## Installation
 The examples currently assume you're using Webpack to build your JS and CSS.
+
 Add it to your project:
 ```shell
 npm install @velvetkevorkian/sketch-ui
@@ -42,15 +43,13 @@ window.requestAnimationFrame(loop)
 
 Drag the slider and watch the values update in real time.
 
-Setting a value works the same way. Let's set the value of `myVariable` to the x coordinate of each mouse click:
-
+Setting a value works the same way.
 ```javascript
-document.addEventListener('click', e => {
-  ui.myVariable = e.clientX
-})
+  ui.myVariable = 200
+  console.log(ui.myVariable) // 200
 ```
 
-Notice the value is capped to 255. Let's look at the defaults and how to change them.
+By default a number using a `range` input has a range of 0-255. Trying to set a variable outside that range will see it clamped to 0 or 255. Let's look at how we can configure the options.
 
 ## Configuration
 The script will try to infer the type of variable you're using, and generate a suitable input with sensible defaults:
@@ -79,6 +78,16 @@ const vars = {
 ```
 The script will validate `min` and `max` values for setters as well as via the UI, which is why `myVariable` maxes out at 255 in the click example above.
 
+You can also set a custom label value if you don't want to use the plain variable name.
+```javascript
+const vars = {
+  backgroundColor: {
+    value: '#0f0f0f',
+    label: 'Background Color'
+  }
+}
+```
+
 Any other options you pass will be applied directly to the input, for example:
 ```javascript
 const vars = {
@@ -93,13 +102,60 @@ will result in
 <input id='myVariable' type='text' value='some text' foo='bar'>
 ```
 
+### Buttons
+
+Setting `type: 'button'` will create a `<button>` element with the text of the label as its text. Let's look at how we can make the button do something when you press it using a callback.
+
 ### Callbacks
+
+Each input can be passed a callback to run when the value is changed.
+```javascript
+const vars = {
+  blendMode: {
+    value: ['ADD', 'BLEND'],
+    label: 'Blend Mode',
+    callback: (val) => {
+      console.log(val)
+    }
+  }
+}
+```
+
+When creating your UI you can pass an additional `context` parameter which will be available to the callback. This can be useful if you need to access properties of other objects. For example, this will call a method on our `p5.js` instance.
+```javascript
+const vars = {
+  loop: {
+    value: true,
+    callback: (val, p) => {
+      val == true ? p.loop() : p.noLoop()
+    }
+  }
+}
+
+new p5(p => {
+  p.setup = () => {
+    const ui = new UI(variables, p).proxy
+  }
+})
+```
+
+You can also do something when a button is pressed. The button has no value but can still access the context if available.
+```javascript
+const vars = {
+  myButton: {
+      type: 'button',
+      label: 'Click me',
+      callback() {
+        console.log('button clicked!')
+      }
+    }
+  }
+```
 
 ## To Do
 - [ ] save to localstorage
 - [ ] fieldsets
 - [ ] multiple UIs?
-- [ ] document callbacks
 - [ ] use with script tag only
 - [ ] worked examples
 - [ ] theming/styling

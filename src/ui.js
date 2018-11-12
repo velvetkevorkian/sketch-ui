@@ -110,7 +110,7 @@ export default class UI {
 
     document.querySelector(`[for=${name}] span`).innerHTML = config.value
 
-    const exclusions = ['callback']
+    const exclusions = ['callback', 'label']
     for(let attr in config) {
       if(!exclusions.includes(attr)) {
         input.setAttribute(attr, config[attr])

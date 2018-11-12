@@ -4,6 +4,7 @@
 - button support
 - custom labels
 - removed global styling
+- remove style/css loaders. End user will have to bring their own.
 
 ## [0.0.2] - 2018-11-11
 ### Changed
