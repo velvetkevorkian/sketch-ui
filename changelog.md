@@ -1,5 +1,7 @@
 # Changelog
-## Unreleased
+## [0.0.3] - Unreleased
+- Edge fixes
+- update monospace font stack
 - show/hide
 - button support
 - custom labels
