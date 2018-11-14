@@ -51,7 +51,9 @@ export default class UI {
       if(!attrs.type) attrs.type = this.inferType(attrs.value)
 
       const defaults = this.defaultSettings(attrs.type)
-      object[item] = {...defaults, ...attrs}
+      // Spread with object literals not support in Edge
+      // object [item] = {...defaults, ...attrs}
+      object[item] = Object.assign(defaults, attrs)
 
       if(attrs.type != 'button') {
         panel.appendChild(this.buildLabel(item, object[item].label))
@@ -110,12 +112,15 @@ export default class UI {
 
     document.querySelector(`[for=${name}] span`).innerHTML = config.value
 
-    const exclusions = ['callback', 'label']
+    const exclusions = ['callback', 'label', 'value']
+
     for(let attr in config) {
       if(!exclusions.includes(attr)) {
         input.setAttribute(attr, config[attr])
       }
     }
+
+    input.value = config['value']
 
     if(config.type == 'checkbox') {
       input.removeAttribute('value')
@@ -124,13 +129,15 @@ export default class UI {
       }
     }
 
-    input.addEventListener('input', event => {
-      let newValue
-      if(config.type == 'checkbox') {
-        newValue = event.target.checked
-      } else newValue = event.target.value
-      this.proxy[name] = newValue
-    })
+    if(config.type == 'checkbox') {
+      input.addEventListener('change', event => {
+        this.proxy[name] = event.target.checked
+      })
+    } else {
+      input.addEventListener('input', event => {
+        this.proxy[name] = event.target.value
+      })
+    }
 
     return input
   }
@@ -168,7 +175,7 @@ export default class UI {
       this.proxy[name] = config.value[0]
     }, {once: true})
 
-    select.addEventListener('input', event => {
+    select.addEventListener('change', event => {
       this.proxy[name] = event.target.value
     })
 
