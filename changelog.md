@@ -1,5 +1,5 @@
 # Changelog
-## [0.0.3] - Unreleased
+## [0.0.3] - 2018-11-15
 - Edge fixes
 - update monospace font stack
 - show/hide
