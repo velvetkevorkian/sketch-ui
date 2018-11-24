@@ -1,7 +1,9 @@
 export default class UI {
-  constructor(config, context) {
+  constructor(config, options) {
+    this.uid = Math.floor(Math.random() * Date.now())
     this.config = config
-    this.context = context
+    this.options = options
+
     this.createUI(this.config)
     this.revocable = this.createProxy()
     this.proxy = this.revocable.proxy
@@ -9,7 +11,7 @@ export default class UI {
   }
 
   destroy() {
-    document.getElementById('ui').remove()
+    document.querySelector(`${this.options.selector} .sketch-ui-panel`).remove()
     this.revocable.revoke()
   }
 
@@ -20,7 +22,7 @@ export default class UI {
         value = this.validate(obj, prop, value)
         obj[prop].value = value
         this.updateField(prop, value)
-        if(obj[prop].callback) obj[prop].callback(value, this.context)
+        if(obj[prop].callback) obj[prop].callback(value, this.options.context)
         return true
       }
     })
@@ -34,12 +36,12 @@ export default class UI {
 
   updateField(prop, value) {
     const type = this.config[prop].type
-    const el = document.getElementById(prop)
+    const el = document.getElementById(this.attrWithUid(prop))
     if(type === 'checkbox') {
       value === true ? el.checked = true : el.removeAttribute('checked')
     } else el.value = value
 
-    document.querySelector(`[for=${prop}] span`).innerHTML = value
+    document.querySelector(`[for=${this.attrWithUid(prop)}] span`).innerHTML = value
   }
 
   createUI(object) {
@@ -70,21 +72,21 @@ export default class UI {
     else return 'text'
   }
 
-  buildPanel(id = 'ui') {
+  buildPanel(selector = this.options.selector) {
     const panel = document.createElement('div')
-    panel.setAttribute('id', id)
+    panel.setAttribute('class', 'sketch-ui-panel')
     const toggle = document.createElement('button')
     toggle.innerHTML = 'Toggle UI'
-    toggle.setAttribute('id', 'ui-toggle')
+    toggle.setAttribute('class', 'ui-toggle')
     toggle.addEventListener('click', () => { panel.classList.toggle('hidden') })
     panel.appendChild(toggle)
-    document.body.appendChild(panel)
+    document.querySelector(selector).appendChild(panel)
     return panel
   }
 
   buildLabel(name, text = name) {
     const label = document.createElement('label')
-    label.setAttribute('for', name)
+    label.setAttribute('for', this.attrWithUid(name))
     label.appendChild(document.createTextNode(text))
     label.appendChild(document.createElement('span'))
     return label
@@ -108,9 +110,9 @@ export default class UI {
     if(config.type === 'select') return this.buildSelect(name, config)
 
     let input = document.createElement('input')
-    input.setAttribute('id', name)
+    input.setAttribute('id', this.attrWithUid(name))
 
-    document.querySelector(`[for=${name}] span`).innerHTML = config.value
+    document.querySelector(`[for=${this.attrWithUid(name)}] span`).innerHTML = config.value
 
     const exclusions = ['callback', 'label', 'value']
 
@@ -180,5 +182,9 @@ export default class UI {
     })
 
     return select
+  }
+
+  attrWithUid(attr) {
+    return `${attr}-${this.uid}`
   }
 }

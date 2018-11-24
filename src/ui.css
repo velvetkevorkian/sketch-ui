@@ -1,8 +1,8 @@
-#ui, #ui * {
+.sketch-ui-panel, .sketch-ui-panel * {
   box-sizing: border-box;
 }
 
-#ui {
+.sketch-ui-panel {
   background: rgba(200, 200, 200, 0.7);
   font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
   padding: 1em 0.5em;
@@ -14,37 +14,37 @@
   transform: translateX(0);
 }
 
-#ui:hover {
+.sketch-ui-panel:hover {
   opacity: 1;
 }
 
-#ui.hidden {
+.sketch-ui-panel.hidden {
   transform: translateX(-500px);
 }
 
-#ui-toggle {
+.sketch-ui-panel .ui-toggle {
   margin-bottom: 1em;
   opacity: 1;
   transition: 100ms opacity, 200ms transform;
 }
 
-#ui.hidden #ui-toggle {
+.sketch-ui-panel.hidden .ui-toggle {
   opacity: 0;
   transform: translateX(500px);
 }
 
-#ui.hidden #ui-toggle:hover {
+.sketch-ui-panel.hidden .ui-toggle:hover {
   opacity: 1;
 }
 
-label {
+.sketch-ui-panel label {
   display: block;
   font-size: 0.8em;
   font-weight: bold;
   margin-bottom: 0.5em;
 }
 
-label span {
+.sketch-ui-panel label span {
   font-weight: normal;
   display: inline-block;
   vertical-align: bottom;
@@ -52,25 +52,25 @@ label span {
   overflow: hidden;
 }
 
-label span::before {
+.sketch-ui-panel label span::before {
   content: ':';
   margin-right: 0.5em;
 }
 
-input, select {
+.sketch-ui-panel input, .sketch-ui-panel select {
   margin-bottom: 1em;
 }
 
-input + label, select + label {
+.sketch-ui-panel input + label, .sketch-ui-panel select + label {
   border-top: 1px solid rgb(180, 180, 180);
   padding-top: 1em;
 }
 
-button {
+.sketch-ui-panel button {
   border: 0;
 }
 
-button, select {
+.sketch-ui-panel button, .sketch-ui-panel select {
   font-family: inherit;
   padding: 0.5em;
 }
