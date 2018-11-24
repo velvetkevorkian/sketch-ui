@@ -4,7 +4,7 @@ __Warning: extremely early version. Breaking changes will happen.__
 
 Generate a UI for tweaking the variables in your creative coding sketches with minimal configuration, using standard HTML inputs.
 
-Designed for use with [p5.js](https://p5js.org/) but not bound to any library or framework.  
+Designed for use with [p5.js](https://p5js.org/) but not bound to any library or framework.
 
 ## Installation
 The examples currently assume you're using Webpack to build your JS and CSS.
@@ -159,6 +159,5 @@ const vars = {
 - [ ] use with script tag only
 - [ ] worked examples
 - [ ] theming/styling
-- [ ] browser testing
 - [ ] transpile/minify?
 - [ ] less flaky jsdom setup
