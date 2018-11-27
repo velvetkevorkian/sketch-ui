@@ -53,7 +53,7 @@ export default class UI {
       if(!attrs.type) attrs.type = this.inferType(attrs.value)
 
       const defaults = this.defaultSettings(attrs.type)
-      // Spread with object literals not support in Edge
+      // Spread with object literals not supported in Edge
       // object [item] = {...defaults, ...attrs}
       object[item] = Object.assign(defaults, attrs)
 
@@ -146,12 +146,12 @@ export default class UI {
 
   buildButton(name, config) {
     const button = document.createElement('button')
-    button.setAttribute('id', name)
+    button.setAttribute('id', this.attrWithUid(name))
     button.innerHTML = config.label ? config.label : name
     if(config.callback) {
       button.addEventListener('click', event => {
         event.preventDefault()
-        config.callback(this.context)
+        config.callback(this.options.context)
       })
     }
 
@@ -163,7 +163,7 @@ export default class UI {
 
   buildSelect(name, config) {
     let select = document.createElement('select')
-    select.setAttribute('id', name)
+    select.setAttribute('id', this.attrWithUid(name))
     config.value.forEach(val => {
       let option = document.createElement('option')
       option.setAttribute('value', val)
@@ -171,7 +171,7 @@ export default class UI {
       select.appendChild(option)
     })
 
-    document.querySelector(`[for=${name}] span`).innerHTML = config.value[0]
+    document.querySelector(`[for=${this.attrWithUid(name)}] span`).innerHTML = config.value[0]
 
     document.addEventListener('proxy-ready', () => {
       this.proxy[name] = config.value[0]
