@@ -1,8 +1,12 @@
 export default class UI {
   constructor(config, options) {
-    this.uid = Math.floor(Math.random() * Date.now())
     this.config = config
-    this.options = options
+    const defaults = {
+      uid: Math.floor(Math.random() * Date.now()),
+      selector: 'body'
+    }
+    if(!options) options = {}
+    this.options = Object.assign(defaults, options)
 
     this.createUI(this.config)
     this.revocable = this.createProxy()
@@ -185,6 +189,6 @@ export default class UI {
   }
 
   attrWithUid(attr) {
-    return `${attr}-${this.uid}`
+    return `${attr}-${this.options.uid}`
   }
 }

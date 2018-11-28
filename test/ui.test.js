@@ -1,11 +1,14 @@
 import UI from '@/ui.js'
 
 context('ui.js', () => {
-  let ui
+  let ui, ui2
   let destroyed = false
 
   beforeEach(() => {
-    ui = new UI({testVar: {value: 127}})
+    ui = new UI(
+      {testVar: {value: 127}},
+      {uid: 'id'}
+    )
   })
 
   afterEach(() => {
@@ -13,50 +16,62 @@ context('ui.js', () => {
     destroyed = false
   })
 
+  describe('parses options', () => {
+    it('sets the selector to body', () => {
+      expect(ui.options.selector).to.equal('body')
+    })
+
+    it('sets the uid to id', () => {
+      expect(ui.options.uid).to.equal('id')
+    })
+  })
+
   describe('creates basic UI elements', () => {
     it('creates the panel', () => {
-      expect(document.getElementById('ui')).to.be.ok
+      expect(document.querySelector('.sketch-ui-panel')).to.be.ok
     })
 
     it('creates the input', () => {
-      const input = document.getElementById('testVar')
-      expect(input).to.have.attr('value', '127')
+      const input = document.getElementById('testVar-id')
+      expect(input.value).to.eq('127')
     })
 
     describe('creates a label', () => {
       it("for attribute matches the input's ID", () => {
-        const label = document.querySelector('[for="testVar"]')
+        const label = document.querySelector('[for="testVar-id"]')
         expect(label).to.be.ok
       })
 
       it("label's text matches variable name", () => {
-        const label = document.querySelector('[for="testVar"]')
+        const label = document.querySelector('[for="testVar-id"]')
         expect(label).to.contain.text('testVar')
       })
 
       describe('label', () => {
         beforeEach(() => {
           ui.destroy()
-          ui = new UI({testVar: {value: 127, label: 'My test variable'}})
+          ui = new UI(
+            {testVar: {value: 127, label: 'My test variable'}},
+            {uid: 'id'})
         })
 
         it('can be custom', () => {
-          const label = document.querySelector('[for="testVar"]')
+          const label = document.querySelector('[for="testVar-id"]')
           expect(label).to.contain.text('My test variable')
         })
       })
 
       it('adds a span with the variable value', () => {
-        const span = document.querySelector('[for="testVar"] span')
+        const span = document.querySelector('[for="testVar-id"] span')
         expect(span).to.have.text('127')
       })
     })
 
     it('can be hidden', () => {
-      const toggle = document.getElementById('ui-toggle')
+      const toggle = document.querySelector('.ui-toggle')
       const event = new Event('click')
       toggle.dispatchEvent(event)
-      const panel = document.getElementById('ui')
+      const panel = document.querySelector('.sketch-ui-panel')
       expect(panel).to.have.class('hidden')
     })
 
@@ -69,13 +84,16 @@ context('ui.js', () => {
 
   describe('creates selects', () => {
     beforeEach(() => {
-      ui = new UI({testArray: {value: ['one', 'two']}})
+      ui = new UI(
+        {testArray: {value: ['one', 'two']}},
+        {uid: 'id'}
+      )
     })
 
     afterEach(() => ui.destroy())
 
     it('creates the select', () => {
-      expect(document.querySelector('select#testArray')).to.be.ok
+      expect(document.querySelector('select#testArray-id')).to.be.ok
     })
 
     it('creates options with the right value', () => {
@@ -103,13 +121,13 @@ context('ui.js', () => {
 
     it('updates the field', () => {
       proxy.testVar = 200
-      const input = document.querySelector('#testVar')
+      const input = document.querySelector('#testVar-id')
       expect(input.value).to.equal('200')
     })
 
     it('updates the span', () => {
       proxy.testVar = 200
-      const span = document.querySelector('[for="testVar"] span')
+      const span = document.querySelector('[for="testVar-id"] span')
       expect(span).to.have.text('200')
     })
 
@@ -159,7 +177,7 @@ context('ui.js', () => {
         callback: function(val, context) {
           context.called = true
         }
-      }}, context)
+      }}, {context: context})
     })
 
     afterEach(() => ui.destroy())
@@ -180,16 +198,46 @@ context('ui.js', () => {
         callback: function(context) {
           context.called = true
         }
-      }}, context)
+      }}, {context: context, uid: 'id'})
     })
 
     afterEach(() => ui.destroy())
 
     it('calls the callback when clicked', () => {
       const evt = new Event('click')
-      const button = document.getElementById('button')
+      const button = document.getElementById('button-id')
       button.dispatchEvent(evt)
       expect(context.called).to.be.true
+    })
+  })
+
+  describe('can create multiple UIs', () => {
+    beforeEach(() => {
+      ui2 = new UI(
+        {testVar: {value: 127}},
+        {uid: 'id2'}
+      )
+    })
+
+    afterEach(() => ui2.destroy())
+
+    it('creates two panels', () => {
+      expect(document.querySelectorAll('.sketch-ui-panel').length).to.eq(2)
+    })
+
+    describe('they have separate values', () => {
+      it('internally', () => {
+        ui2.proxy.testVar = 12
+        expect(ui.proxy.testVar).to.eq(127)
+      })
+
+      it('in the dom', () => {
+        ui2.proxy.testVar = 12
+        const result1 = document.querySelector('#testVar-id').value == '127'
+        const result2 = document.querySelector('#testVar-id2').value == '12'
+        expect(result1).to.be.true
+        expect(result2).to.be.true
+      })
     })
   })
 
