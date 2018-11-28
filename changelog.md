@@ -1,16 +1,30 @@
 # Changelog
+## Unreleased
+### Changed
+- Support multiple UI instances
+
 ## [0.0.3] - 2018-11-15
+
+### Fixed
 - Edge fixes
+
+### Changed
 - update monospace font stack
+
+### Added
 - show/hide
 - button support
 - custom labels
+
+### Removed
 - removed global styling
 - remove style/css loaders. End user will have to bring their own.
 
 ## [0.0.2] - 2018-11-11
-### Changed
+### Fixed
 - Correct main field in package.json
+
+### Changed
 - Start documentation
 
 ## [0.0.1] - 2018-11-10

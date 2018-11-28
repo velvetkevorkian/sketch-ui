@@ -153,9 +153,10 @@ const vars = {
 ```
 
 ## To Do
+- [ ] document with gifs
+- [ ] document multiple instances
 - [ ] save to localstorage
 - [ ] fieldsets
-- [ ] multiple UIs?
 - [ ] use with script tag only
 - [ ] worked examples
 - [ ] theming/styling
