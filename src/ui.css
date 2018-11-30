@@ -5,13 +5,15 @@
 .sketch-ui-panel {
   background: rgba(200, 200, 200, 0.7);
   font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
+  left: 0.5em;
+  max-height: 100vh;
+  opacity: 0.5;
+  overflow: auto;
   padding: 1em 0.5em;
   position: fixed;
   top: 0.5em;
-  left: 0.5em;
-  opacity: 0.5;
-  transition: 100ms opacity, 200ms transform;
   transform: translateX(0);
+  transition: 100ms opacity, 200ms transform;
 }
 
 .sketch-ui-panel:hover {
