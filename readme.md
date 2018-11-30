@@ -162,3 +162,4 @@ const vars = {
 - [ ] theming/styling
 - [ ] transpile/minify?
 - [ ] less flaky jsdom setup
+- [ ] add CSSlint

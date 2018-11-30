@@ -1,7 +1,8 @@
 # Changelog
-## Unreleased
+## [0.0.4] - Unreleased
 ### Changed
 - Support multiple UI instances
+- Allow panel to scroll if taller than window
 
 ## [0.0.3] - 2018-11-15
 
