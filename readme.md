@@ -153,6 +153,7 @@ const vars = {
 ```
 
 ## To Do
+- [ ] pop-out?
 - [ ] document with gifs
 - [ ] document multiple instances
 - [ ] save to localstorage
