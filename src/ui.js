@@ -160,6 +160,7 @@ export default class UI {
     }
 
     const div = document.createElement('div')
+    div.classList.add('sketch-ui-button-wrapper')
     div.appendChild(button)
 
     return div

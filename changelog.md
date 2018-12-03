@@ -1,11 +1,15 @@
 # Changelog
+
+## Unreleased
+### Changed
+- Space out buttons
+
 ## [0.0.4] - 2018-12-02
 ### Changed
 - Support multiple UI instances
 - Allow panel to scroll if taller than window
 
 ## [0.0.3] - 2018-11-15
-
 ### Fixed
 - Edge fixes
 
