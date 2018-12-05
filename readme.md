@@ -164,3 +164,5 @@ const vars = {
 - [ ] transpile/minify?
 - [ ] less flaky jsdom setup
 - [ ] add CSSlint
+- [ ] show/hide options?
+- [ ] can callbacks reference the parent UI element?
