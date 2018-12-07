@@ -1,0 +1,10 @@
+{
+  "warnings": [
+    "order-alphabetical",
+    "duplicate-properties",
+    "empty-rules",
+    "import",
+    "overqualified-elements",
+    "zero-units"
+  ]
+}

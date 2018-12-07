@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+### Added
+- CSSLint
+
 ### Changed
 - Space out buttons
 

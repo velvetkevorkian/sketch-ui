@@ -11,10 +11,10 @@
   overflow: auto;
   padding: 1em 0.5em;
   position: fixed;
+  resize: both;
   top: 0.5em;
   transform: translateX(0);
   transition: 100ms opacity, 200ms transform;
-  resize: both;
 }
 
 .sketch-ui-panel:hover {
@@ -22,8 +22,8 @@
 }
 
 .sketch-ui-panel.hidden {
-  transform: translateX(-500px);
   overflow: visible;
+  transform: translateX(-500px);
 }
 
 .sketch-ui-panel .ui-toggle {
@@ -49,11 +49,11 @@
 }
 
 .sketch-ui-panel label span {
-  font-weight: normal;
   display: inline-block;
+  font-weight: normal;
+  overflow: hidden;
   vertical-align: bottom;
   width: 6em;
-  overflow: hidden;
 }
 
 .sketch-ui-panel label span::before {

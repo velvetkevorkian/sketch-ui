@@ -153,7 +153,6 @@ const vars = {
 ```
 
 ## To Do
-- [ ] pop-out?
 - [ ] document with gifs
 - [ ] document multiple instances
 - [ ] save to localstorage
@@ -163,7 +162,6 @@ const vars = {
 - [ ] theming/styling
 - [ ] transpile/minify?
 - [ ] less flaky jsdom setup
-- [ ] add CSSlint
 - [ ] show/hide options?
 - [ ] can callbacks reference the parent UI element?
 - [ ] drag to move

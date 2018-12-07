@@ -7,6 +7,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-dom": "^1.8.1",
+    "csslint": "^1.0.5",
     "eslint": "^5.9.0",
     "jsdom": "^12.2.0",
     "jsdom-global": "^3.0.2",
@@ -16,7 +17,8 @@
   },
   "scripts": {
     "test": "mocha-webpack --opts test/mocha.opts",
-    "test:watch": "mocha-webpack --watch --opts test/mocha.opts"
+    "test:watch": "mocha-webpack --watch --opts test/mocha.opts",
+    "lint:css": "csslint --config=.csslintrc src/*.css"
   },
   "keywords": [],
   "author": "Kyle Macquarrie",
