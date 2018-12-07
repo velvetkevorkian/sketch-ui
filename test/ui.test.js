@@ -144,28 +144,6 @@ context('ui.js', () => {
     })
   })
 
-  describe('we can guess the input type from the value', () => {
-    it('color if hex code', () => {
-      expect(ui.inferType('#ff0000')).to.equal('color')
-    })
-
-    it('range if number', () => {
-      expect(ui.inferType(100)).to.equal('range')
-    })
-
-    it('checkbox if boolean', () => {
-      expect(ui.inferType(true)).to.equal('checkbox')
-    })
-
-    it('select if array', () => {
-      expect(ui.inferType(['one', 'two'])).to.equal('select')
-    })
-
-    it('falls back to text', () => {
-      expect(ui.inferType('blah')).to.equal('text')
-    })
-  })
-
   describe('passing a callback works', () => {
     let context
 

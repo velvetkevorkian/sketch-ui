@@ -1,3 +1,5 @@
+import { validate, inferType, defaultSettings } from './utils.js'
+
 export default class UI {
   constructor(config, options) {
     this.config = config
@@ -8,7 +10,7 @@ export default class UI {
     if(!options) options = {}
     this.options = Object.assign(defaults, options)
 
-    this.createUI(this.config)
+    this.panel = this.createUI(this.config)
     this.revocable = this.createProxy()
     this.proxy = this.revocable.proxy
     document.dispatchEvent(new Event('proxy-ready'))
@@ -23,19 +25,13 @@ export default class UI {
     return Proxy.revocable(this.config, {
       get: (obj, prop) =>  obj[prop].value,
       set: (obj, prop, value) => {
-        value = this.validate(obj, prop, value)
+        value = validate(obj, prop, value)
         obj[prop].value = value
         this.updateField(prop, value)
         if(obj[prop].callback) obj[prop].callback(value, this.options.context)
         return true
       }
     })
-  }
-
-  validate(obj, prop, value) {
-    if(obj[prop].min !== undefined) value = Math.max(value, obj[prop].min)
-    if(obj[prop].max !== undefined) value = Math.min(value, obj[prop].max)
-    return value
   }
 
   updateField(prop, value) {
@@ -54,9 +50,9 @@ export default class UI {
     for(let item in object) {
       let attrs = object[item]
 
-      if(!attrs.type) attrs.type = this.inferType(attrs.value)
+      if(!attrs.type) attrs.type = inferType(attrs.value)
 
-      const defaults = this.defaultSettings(attrs.type)
+      const defaults = defaultSettings(attrs.type)
       // Spread with object literals not supported in Edge
       // object [item] = {...defaults, ...attrs}
       object[item] = Object.assign(defaults, attrs)
@@ -66,14 +62,8 @@ export default class UI {
       }
       panel.appendChild(this.buildInput(item, object[item]))
     }
-  }
 
-  inferType(value) {
-    if(typeof value == 'string' && value[0] == '#' && value.length == 7) return 'color'
-    if(typeof value == 'number') return 'range'
-    if(typeof value == 'boolean') return 'checkbox'
-    if(Array.isArray(value)) return 'select'
-    else return 'text'
+    return panel
   }
 
   buildPanel(selector = this.options.selector) {
@@ -94,19 +84,6 @@ export default class UI {
     label.appendChild(document.createTextNode(text))
     label.appendChild(document.createElement('span'))
     return label
-  }
-
-  defaultSettings(type) {
-    const defaults = {
-      range: {
-        step: 1,
-        min: 0,
-        max: 255
-      }
-    }
-
-    if(defaults[type] === undefined) return {}
-    else return defaults[type]
   }
 
   buildInput(name, config) {
