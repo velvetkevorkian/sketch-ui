@@ -4,21 +4,22 @@ export default class UI {
   constructor(config, options) {
     this.config = config
     const defaults = {
-      uid: Math.floor(Math.random() * Date.now()),
+      uid: 'ui-' + Math.floor(Math.random() * Date.now()),
       selector: 'body'
     }
     if(!options) options = {}
     this.options = Object.assign(defaults, options)
 
-    this.panel = this.createUI(this.config)
+    this.createUI(this.config)
     this.revocable = this.createProxy()
     this.proxy = this.revocable.proxy
     document.dispatchEvent(new Event('proxy-ready'))
   }
 
   destroy() {
-    document.querySelector(`${this.options.selector} .sketch-ui-panel`).remove()
+    this.panel.remove()
     this.revocable.revoke()
+    return null
   }
 
   createProxy() {
@@ -63,18 +64,22 @@ export default class UI {
       panel.appendChild(this.buildInput(item, object[item]))
     }
 
+    this.panel = panel
+
     return panel
   }
 
   buildPanel(selector = this.options.selector) {
-    const panel = document.createElement('div')
-    panel.setAttribute('class', 'sketch-ui-panel')
-    const toggle = document.createElement('button')
-    toggle.innerHTML = 'Toggle UI'
-    toggle.setAttribute('class', 'ui-toggle')
-    toggle.addEventListener('click', () => { panel.classList.toggle('hidden') })
-    panel.appendChild(toggle)
-    document.querySelector(selector).appendChild(panel)
+    const el = document.querySelector(selector)
+    el.innerHTML = `
+    <div class='sketch-ui-panel' id='${this.options.uid}'>
+      <button class='ui-toggle'>Toggle UI</button>
+    </div>
+  `
+    const panel = el.querySelector('.sketch-ui-panel')
+    el.querySelector('.ui-toggle')
+      .addEventListener('click', () => { panel.classList.toggle('hidden') })
+
     return panel
   }
 
