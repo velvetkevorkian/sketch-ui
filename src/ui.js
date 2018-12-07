@@ -86,8 +86,7 @@ export default class UI {
   buildLabel(name, text = name) {
     const label = document.createElement('label')
     label.setAttribute('for', this.attrWithUid(name))
-    label.appendChild(document.createTextNode(text))
-    label.appendChild(document.createElement('span'))
+    label.innerHTML = `${text}<span></span>`
     return label
   }
 
@@ -131,19 +130,21 @@ export default class UI {
   }
 
   buildButton(name, config) {
-    const button = document.createElement('button')
-    button.setAttribute('id', this.attrWithUid(name))
-    button.innerHTML = config.label ? config.label : name
+    const div = document.createElement('div')
+    div.classList.add('sketch-ui-button-wrapper')
+    div.innerHTML = `
+      <button id=${this.attrWithUid(name)}>
+        ${config.label ? config.label : name}
+      </button>
+    `
+
     if(config.callback) {
+      const button = div.querySelector('button')
       button.addEventListener('click', event => {
         event.preventDefault()
         config.callback(this.options.context)
       })
     }
-
-    const div = document.createElement('div')
-    div.classList.add('sketch-ui-button-wrapper')
-    div.appendChild(button)
 
     return div
   }
@@ -151,12 +152,9 @@ export default class UI {
   buildSelect(name, config) {
     let select = document.createElement('select')
     select.setAttribute('id', this.attrWithUid(name))
-    config.value.forEach(val => {
-      let option = document.createElement('option')
-      option.setAttribute('value', val)
-      option.appendChild(document.createTextNode(val))
-      select.appendChild(option)
-    })
+    select.innerHTML = config.value.map(option => {
+      return `<option value='${option}'>${option}</option>`
+    }).join('')
 
     document.querySelector(`[for=${this.attrWithUid(name)}] span`).innerHTML = config.value[0]
 
