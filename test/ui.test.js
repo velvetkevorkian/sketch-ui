@@ -2,7 +2,6 @@ import UI from '@/ui.js'
 
 context('ui.js', () => {
   let ui, ui2
-  // let destroyed = false
 
   beforeEach(() => {
     ui = new UI(
@@ -13,7 +12,6 @@ context('ui.js', () => {
 
   afterEach(() => {
     if(ui) ui = ui.destroy()
-    // destroyed = false
   })
 
   describe('parses options', () => {
@@ -76,7 +74,6 @@ context('ui.js', () => {
     })
 
     it('cleans up after itself', () => {
-      // destroyed = true
       if(ui) ui = ui.destroy()
       const result = document.body.innerHTML.replace(/\s+/g, '')
       expect(result).to.equal('')

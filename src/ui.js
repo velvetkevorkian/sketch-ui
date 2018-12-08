@@ -1,4 +1,4 @@
-import { validate, inferType, defaultSettings } from './utils.js'
+import { validate, inferType, defaultSettings, panelStyle } from './utils.js'
 
 export default class UI {
   constructor(variables, options) {
@@ -10,10 +10,16 @@ export default class UI {
     if(!options) options = {}
     this.options = Object.assign(defaults, options)
 
-    if(localStorage.getItem(this.options.uid)) {
-      // merge defaults with stored
-      console.log(JSON.parse(localStorage.getItem(this.options.uid)))
-    }
+    // jsdom throws an error if you access localStorage on about:blank
+    // but it seems to be impossible to navigate to a url with jsdom-global
+    try {
+      const savedState = window.localStorage.getItem(this.options.uid)
+      if(savedState) {
+        const parsedState = JSON.parse(savedState)
+        this.width = parsedState.width
+        this.height = parsedState.height
+      }
+    } catch(err) { if(err.name != 'SecurityError') throw err }
 
     this.createUI(this.variables)
     this.revocable = this.createProxy()
@@ -38,7 +44,10 @@ export default class UI {
   }
 
   saveState() {
-    window.localStorage.setItem(this.options.uid, JSON.stringify(this.getState()))
+    const newState = JSON.stringify(this.getState())
+    try {
+      window.localStorage.setItem(this.options.uid, newState)
+    } catch(err) { if(err.name != 'SecurityError') throw err }
   }
 
   getValues() {
@@ -66,6 +75,7 @@ export default class UI {
   updateSize() {
     this.width = this.panel.offsetWidth
     this.height = this.panel.offsetHeight
+    this.panel.setAttribute('style', panelStyle(this.width, this.height))
     this.saveState()
   }
 
@@ -106,7 +116,7 @@ export default class UI {
   buildPanel(selector = this.options.selector) {
     const el = document.querySelector(selector)
     el.innerHTML = `
-    <div class='sketch-ui-panel' id='${this.options.uid}'>
+    <div class='sketch-ui-panel' id='${this.options.uid}' style='${panelStyle(this.width, this.height)}'>
       <button class='ui-toggle'>Toggle UI</button>
     </div>
   `
