@@ -1,7 +1,7 @@
-import { inferType } from '@/utils.js'
+import { inferType, panelStyle } from '@/utils.js'
 
 context('utils.js', () => {
-  describe('we can guess the input type from the value', () => {
+  describe('inferType', () => {
     it('color if hex code', () => {
       expect(inferType('#ff0000')).to.equal('color')
     })
@@ -20,6 +20,12 @@ context('utils.js', () => {
 
     it('falls back to text', () => {
       expect(inferType('blah')).to.equal('text')
+    })
+  })
+
+  describe('panelStyle', () => {
+    it('returns a style string', () => {
+      expect(panelStyle(100, 200)).to.equal('width: 100px; height: 200px;')
     })
   })
 })
