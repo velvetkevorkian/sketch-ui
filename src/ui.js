@@ -10,6 +10,11 @@ export default class UI {
     if(!options) options = {}
     this.options = Object.assign(defaults, options)
 
+    if(localStorage.getItem(this.options.uid)) {
+      // merge defaults with stored
+      console.log(JSON.parse(localStorage.getItem(this.options.uid)))
+    }
+
     this.createUI(this.variables)
     this.revocable = this.createProxy()
     this.proxy = this.revocable.proxy
@@ -24,14 +29,35 @@ export default class UI {
     return null
   }
 
+  getState() {
+    return {
+      width: this.width,
+      height: this.height,
+      values: this.getValues()
+    }
+  }
+
+  saveState() {
+    window.localStorage.setItem(this.options.uid, JSON.stringify(this.getState()))
+  }
+
+  getValues() {
+    let values = []
+    for(let v in this.variables) {
+      values.push({[v]: this.variables[v].value})
+    }
+    return values
+  }
+
   createProxy() {
     return Proxy.revocable(this.variables, {
-      get: (obj, prop) =>  obj[prop].value,
+      get: (obj, prop) => obj[prop].value,
       set: (obj, prop, value) => {
         value = validate(obj, prop, value)
         obj[prop].value = value
         this.updateField(prop, value)
         if(obj[prop].callback) obj[prop].callback(value, this.options.context)
+        this.saveState()
         return true
       }
     })
@@ -40,6 +66,7 @@ export default class UI {
   updateSize() {
     this.width = this.panel.offsetWidth
     this.height = this.panel.offsetHeight
+    this.saveState()
   }
 
   updateField(prop, value) {
