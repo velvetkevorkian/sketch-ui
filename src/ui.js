@@ -13,6 +13,8 @@ export default class UI {
     this.createUI(this.config)
     this.revocable = this.createProxy()
     this.proxy = this.revocable.proxy
+    window.sketchUI = (window.ui || [])
+    window.sketchUI.push(this)
     document.dispatchEvent(new Event('proxy-ready'))
   }
 
@@ -33,6 +35,11 @@ export default class UI {
         return true
       }
     })
+  }
+
+  updateSize() {
+    this.width = this.panel.offsetWidth
+    this.height = this.panel.offsetHeight
   }
 
   updateField(prop, value) {
@@ -65,7 +72,7 @@ export default class UI {
     }
 
     this.panel = panel
-
+    this.updateSize()
     return panel
   }
 
@@ -76,9 +83,11 @@ export default class UI {
       <button class='ui-toggle'>Toggle UI</button>
     </div>
   `
-    const panel = el.querySelector('.sketch-ui-panel')
-    el.querySelector('.ui-toggle')
+    const panel = el.querySelector(`#${this.options.uid}`)
+    panel.querySelector('.ui-toggle')
       .addEventListener('click', () => { panel.classList.toggle('hidden') })
+
+    panel.addEventListener('mouseup', () => this.updateSize())
 
     return panel
   }
