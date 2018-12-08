@@ -1,8 +1,8 @@
 import { validate, inferType, defaultSettings } from './utils.js'
 
 export default class UI {
-  constructor(config, options) {
-    this.config = config
+  constructor(variables, options) {
+    this.variables = variables
     const defaults = {
       uid: 'ui-' + Math.floor(Math.random() * Date.now()),
       selector: 'body'
@@ -10,7 +10,7 @@ export default class UI {
     if(!options) options = {}
     this.options = Object.assign(defaults, options)
 
-    this.createUI(this.config)
+    this.createUI(this.variables)
     this.revocable = this.createProxy()
     this.proxy = this.revocable.proxy
     window.sketchUI = (window.ui || [])
@@ -25,7 +25,7 @@ export default class UI {
   }
 
   createProxy() {
-    return Proxy.revocable(this.config, {
+    return Proxy.revocable(this.variables, {
       get: (obj, prop) =>  obj[prop].value,
       set: (obj, prop, value) => {
         value = validate(obj, prop, value)
@@ -43,7 +43,7 @@ export default class UI {
   }
 
   updateField(prop, value) {
-    const type = this.config[prop].type
+    const type = this.variables[prop].type
     const el = document.getElementById(this.attrWithUid(prop))
     if(type === 'checkbox') {
       value === true ? el.checked = true : el.removeAttribute('checked')
@@ -99,33 +99,33 @@ export default class UI {
     return label
   }
 
-  buildInput(name, config) {
-    if(config.type === 'button') return this.buildButton(name, config)
-    if(config.type === 'select') return this.buildSelect(name, config)
+  buildInput(name, variables) {
+    if(variables.type === 'button') return this.buildButton(name, variables)
+    if(variables.type === 'select') return this.buildSelect(name, variables)
 
     let input = document.createElement('input')
     input.setAttribute('id', this.attrWithUid(name))
 
-    document.querySelector(`[for=${this.attrWithUid(name)}] span`).innerHTML = config.value
+    document.querySelector(`[for=${this.attrWithUid(name)}] span`).innerHTML = variables.value
 
     const exclusions = ['callback', 'label', 'value']
 
-    for(let attr in config) {
+    for(let attr in variables) {
       if(!exclusions.includes(attr)) {
-        input.setAttribute(attr, config[attr])
+        input.setAttribute(attr, variables[attr])
       }
     }
 
-    input.value = config['value']
+    input.value = variables['value']
 
-    if(config.type == 'checkbox') {
+    if(variables.type == 'checkbox') {
       input.removeAttribute('value')
-      if(config.value == true) {
-        input.setAttribute('checked', config.value)
+      if(variables.value == true) {
+        input.setAttribute('checked', variables.value)
       }
     }
 
-    if(config.type == 'checkbox') {
+    if(variables.type == 'checkbox') {
       input.addEventListener('change', event => {
         this.proxy[name] = event.target.checked
       })
@@ -138,37 +138,37 @@ export default class UI {
     return input
   }
 
-  buildButton(name, config) {
+  buildButton(name, variables) {
     const div = document.createElement('div')
     div.classList.add('sketch-ui-button-wrapper')
     div.innerHTML = `
       <button id=${this.attrWithUid(name)}>
-        ${config.label ? config.label : name}
+        ${variables.label ? variables.label : name}
       </button>
     `
 
-    if(config.callback) {
+    if(variables.callback) {
       const button = div.querySelector('button')
       button.addEventListener('click', event => {
         event.preventDefault()
-        config.callback(this.options.context)
+        variables.callback(this.options.context)
       })
     }
 
     return div
   }
 
-  buildSelect(name, config) {
+  buildSelect(name, variables) {
     let select = document.createElement('select')
     select.setAttribute('id', this.attrWithUid(name))
-    select.innerHTML = config.value.map(option => {
+    select.innerHTML = variables.value.map(option => {
       return `<option value='${option}'>${option}</option>`
     }).join('')
 
-    document.querySelector(`[for=${this.attrWithUid(name)}] span`).innerHTML = config.value[0]
+    document.querySelector(`[for=${this.attrWithUid(name)}] span`).innerHTML = variables.value[0]
 
     document.addEventListener('proxy-ready', () => {
-      this.proxy[name] = config.value[0]
+      this.proxy[name] = variables.value[0]
     }, {once: true})
 
     select.addEventListener('change', event => {
