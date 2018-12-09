@@ -18,6 +18,8 @@ export default class UI {
         const parsedState = JSON.parse(savedState)
         this.width = parsedState.width
         this.height = parsedState.height
+        this.xpos = parsedState.xpos
+        this.ypos = parsedState.ypos
       }
     } catch(err) { if(err.name != 'SecurityError') throw err }
 
@@ -39,6 +41,8 @@ export default class UI {
     return {
       width: this.width,
       height: this.height,
+      xpos: this.xpos,
+      ypos: this.ypos,
       values: this.getValues()
     }
   }
@@ -75,7 +79,8 @@ export default class UI {
   updateSize() {
     this.width = this.panel.offsetWidth
     this.height = this.panel.offsetHeight
-    this.panel.setAttribute('style', panelStyle(this.width, this.height, {x: this.xpos, y: this.ypos}))
+    const newStyle = panelStyle(this.width, this.height, {x: this.xpos, y: this.ypos})
+    this.panel.setAttribute('style', newStyle)
     this.saveState()
   }
 
@@ -119,17 +124,25 @@ export default class UI {
     <div class='sketch-ui-panel' id='${this.options.uid}' style='${panelStyle(this.width, this.height)}'>
       <div class='sketch-ui-handle'>Move</div>
       <button class='ui-toggle'>Toggle UI</button>
+      <button class='ui-clear'>Clear saved</button>
     </div>
   `
     const panel = el.querySelector(`#${this.options.uid}`)
     panel.querySelector('.ui-toggle')
       .addEventListener('click', () => { panel.classList.toggle('hidden') })
 
+    panel.querySelector('.ui-clear')
+      .addEventListener('click', () => window.localStorage.clear())
+
     const handle = panel.querySelector('.sketch-ui-handle')
     handle.addEventListener('mousedown', event => {
       event.preventDefault()
-      this.xpos = event.clientX
-      this.ypos =  event.clientY
+      const rect = panel.getBoundingClientRect()
+      this.xpos = rect.left
+      this.ypos = rect.top
+      this.xOffset = event.clientX - this.xpos
+      this.yOffset = event.clientY - this.ypos
+
       const callback = this.handlePanelDrag.bind(this)
       document.addEventListener('mousemove', callback)
       document.addEventListener('mouseup', event => {
@@ -144,11 +157,9 @@ export default class UI {
   }
 
   handlePanelDrag(event) {
-    this.xpos = event.clientX
-    this.ypos = event.clientY
-
-    const newStyle = panelStyle(this.width, this.height, {x: this.xpos, y: this.ypos})
-    this.panel.setAttribute('style', newStyle )
+    this.xpos = event.clientX - this.xOffset
+    this.ypos = event.clientY - this.yOffset
+    this.updateSize()
   }
 
   buildLabel(name, text = name) {

@@ -9,7 +9,7 @@
   max-height: 100vh;
   opacity: 0.5;
   overflow: auto;
-  padding: 1em 0.5em;
+  padding: 2em 0.5em 1em;
   position: fixed;
   resize: both;
   top: 0.5em;
@@ -81,4 +81,14 @@
 
 .sketch-ui-button-wrapper {
   margin: 1em 0;
+}
+
+.sketch-ui-handle {
+  text-align: center;
+  background: darkblue;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  cursor: move;
 }

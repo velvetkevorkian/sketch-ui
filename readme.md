@@ -164,4 +164,3 @@ const vars = {
 - [ ] less flaky jsdom setup
 - [ ] show/hide options?
 - [ ] can callbacks reference the parent UI element?
-- [ ] drag to move
