@@ -75,7 +75,7 @@ export default class UI {
   updateSize() {
     this.width = this.panel.offsetWidth
     this.height = this.panel.offsetHeight
-    this.panel.setAttribute('style', panelStyle(this.width, this.height))
+    this.panel.setAttribute('style', panelStyle(this.width, this.height, {x: this.xpos, y: this.ypos}))
     this.saveState()
   }
 
@@ -117,6 +117,7 @@ export default class UI {
     const el = document.querySelector(selector)
     el.innerHTML = `
     <div class='sketch-ui-panel' id='${this.options.uid}' style='${panelStyle(this.width, this.height)}'>
+      <div class='sketch-ui-handle'>Move</div>
       <button class='ui-toggle'>Toggle UI</button>
     </div>
   `
@@ -124,9 +125,30 @@ export default class UI {
     panel.querySelector('.ui-toggle')
       .addEventListener('click', () => { panel.classList.toggle('hidden') })
 
+    const handle = panel.querySelector('.sketch-ui-handle')
+    handle.addEventListener('mousedown', event => {
+      event.preventDefault()
+      this.xpos = event.clientX
+      this.ypos =  event.clientY
+      const callback = this.handlePanelDrag.bind(this)
+      document.addEventListener('mousemove', callback)
+      document.addEventListener('mouseup', event => {
+        event.preventDefault()
+        document.removeEventListener('mousemove', callback)
+      })
+    })
+
     panel.addEventListener('mouseup', () => this.updateSize())
 
     return panel
+  }
+
+  handlePanelDrag(event) {
+    this.xpos = event.clientX
+    this.ypos = event.clientY
+
+    const newStyle = panelStyle(this.width, this.height, {x: this.xpos, y: this.ypos})
+    this.panel.setAttribute('style', newStyle )
   }
 
   buildLabel(name, text = name) {

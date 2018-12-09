@@ -14,7 +14,7 @@
   resize: both;
   top: 0.5em;
   transform: translateX(0);
-  transition: 100ms opacity, 200ms transform;
+  transition: 100ms opacity;
 }
 
 .sketch-ui-panel:hover {

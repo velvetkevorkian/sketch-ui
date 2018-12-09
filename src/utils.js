@@ -24,8 +24,8 @@ function defaultSettings(type) {
   return defaults[type]  ? defaults[type] : {}
 }
 
-function panelStyle(width, height) {
-  return `width: ${width}px; height: ${height}px;`
+function panelStyle(width, height, transform = {x: 0, y: 0}) {
+  return `width: ${width}px; height: ${height}px; transform: translateX(${transform.x}px) translateY(${transform.y}px);`
 }
 
 export { validate, inferType, defaultSettings, panelStyle }
