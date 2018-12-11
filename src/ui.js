@@ -11,7 +11,8 @@ export default class UI {
     this.options = Object.assign(defaults, options)
 
     // jsdom throws an error if you access localStorage on about:blank
-    // but it seems to be impossible to navigate to a url with jsdom-global
+    // but it seems to be impossible to navigate to a url with jsdom-global.
+    // Swallow that particular error and hope for the best.
     try {
       const savedState = window.localStorage.getItem(this.options.uid)
       if(savedState) {
@@ -20,6 +21,12 @@ export default class UI {
         this.height = parsedState.height
         this.xpos = parsedState.xpos
         this.ypos = parsedState.ypos
+
+        parsedState.values.forEach(val => {
+          const name = Object.keys(val)[0]
+          const value = Object.values(val)[0]
+          this.variables[name].value = value
+        })
       }
     } catch(err) { if(err.name != 'SecurityError') throw err }
 
@@ -57,7 +64,9 @@ export default class UI {
   getValues() {
     let values = []
     for(let v in this.variables) {
-      values.push({[v]: this.variables[v].value})
+      if(this.variables[v].type != 'button') {
+        values.push({[v]: this.variables[v].value})
+      }
     }
     return values
   }
