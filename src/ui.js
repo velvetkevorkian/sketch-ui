@@ -5,7 +5,8 @@ export default class UI {
     this.variables = variables
     const defaults = {
       uid: 'ui-' + Math.floor(Math.random() * Date.now()),
-      selector: 'body'
+      selector: 'body',
+      save: true
     }
     if(!options) options = {}
     this.options = Object.assign(defaults, options)
@@ -15,7 +16,7 @@ export default class UI {
     // Swallow that particular error and hope for the best.
     try {
       const savedState = window.localStorage.getItem(this.options.uid)
-      if(savedState) {
+      if(savedState && this.options.save) {
         const parsedState = JSON.parse(savedState)
         this.width = parsedState.width
         this.height = parsedState.height
@@ -55,10 +56,12 @@ export default class UI {
   }
 
   saveState() {
-    const newState = JSON.stringify(this.getState())
-    try {
-      window.localStorage.setItem(this.options.uid, newState)
-    } catch(err) { if(err.name != 'SecurityError') throw err }
+    if(this.options.save) {
+      const newState = JSON.stringify(this.getState())
+      try {
+        window.localStorage.setItem(this.options.uid, newState)
+      } catch(err) { if(err.name != 'SecurityError') throw err }
+    }
   }
 
   getValues() {
@@ -109,7 +112,13 @@ export default class UI {
     for(let item in object) {
       let attrs = object[item]
 
-      if(!attrs.type) attrs.type = inferType(attrs.value)
+      if(!attrs.type) {
+        if(attrs.options) {
+          attrs.type = 'select'
+        } else {
+          attrs.type = inferType(attrs.value)
+        }
+      }
 
       const defaults = defaultSettings(attrs.type)
       // Spread with object literals not supported in Edge
@@ -240,14 +249,16 @@ export default class UI {
   buildSelect(name, variables) {
     let select = document.createElement('select')
     select.setAttribute('id', this.attrWithUid(name))
-    select.innerHTML = variables.value.map(option => {
+    select.innerHTML = variables.options.map(option => {
       return `<option value='${option}'>${option}</option>`
     }).join('')
 
-    document.querySelector(`[for=${this.attrWithUid(name)}] span`).innerHTML = variables.value[0]
+    const initialValue = variables.value ? variables.value : variables.options[0]
+
+    document.querySelector(`[for=${this.attrWithUid(name)}] span`).innerHTML = initialValue
 
     document.addEventListener('proxy-ready', () => {
-      this.proxy[name] = variables.value[0]
+      this.proxy[name] = initialValue
     }, {once: true})
 
     select.addEventListener('change', event => {

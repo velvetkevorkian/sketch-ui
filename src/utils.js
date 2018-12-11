@@ -8,7 +8,6 @@ function inferType(value) {
   if(typeof value == 'string' && value[0] == '#' && value.length == 7) return 'color'
   if(typeof value == 'number') return 'range'
   if(typeof value == 'boolean') return 'checkbox'
-  if(Array.isArray(value)) return 'select'
   else return 'text'
 }
 
