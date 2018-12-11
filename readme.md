@@ -155,7 +155,6 @@ const vars = {
 ## To Do
 - [ ] document with gifs
 - [ ] document multiple instances
-- [ ] save to localstorage
 - [ ] fieldsets
 - [ ] use with script tag only
 - [ ] worked examples
