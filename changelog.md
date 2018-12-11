@@ -3,9 +3,12 @@
 ## Unreleased
 ### Added
 - CSSLint
+- Drag to move and resize UI panel
+- Save and load values, position and size to localStorage automatically
 
 ### Changed
 - Space out buttons
+- Selects now need an options array, separate from value
 
 ## [0.0.4] - 2018-12-02
 ### Changed
