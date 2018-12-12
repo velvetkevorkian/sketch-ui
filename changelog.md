@@ -9,6 +9,7 @@
 ### Changed
 - Space out buttons
 - Selects now need an options array, separate from value
+- Show/hide with h key instead of button
 
 ## [0.0.4] - 2018-12-02
 ### Changed
