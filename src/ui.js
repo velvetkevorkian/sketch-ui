@@ -6,10 +6,18 @@ export default class UI {
     const defaults = {
       uid: 'ui-' + Math.floor(Math.random() * Date.now()),
       selector: 'body',
-      save: true
+      save: true,
+      width: 320,
+      height: 450,
+      xpos: 20,
+      ypos: 20
     }
     if(!options) options = {}
     this.options = Object.assign(defaults, options)
+    this.width = this.options.width
+    this.height = this.options.height
+    this.xpos = this.options.xpos
+    this.ypos = this.options.ypos
 
     // jsdom throws an error if you access localStorage on about:blank
     // but it seems to be impossible to navigate to a url with jsdom-global.

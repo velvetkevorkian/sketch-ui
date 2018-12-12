@@ -5,14 +5,14 @@
 .sketch-ui-panel {
   background: rgba(200, 200, 200, 0.7);
   font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
-  left: 0.5em;
+  /* left: 0.5em; */
   max-height: 100vh;
   opacity: 0.5;
   overflow: auto;
   padding: 2em 0.5em 1em;
   position: fixed;
   resize: both;
-  top: 0.5em;
+  /* top: 0.5em; */
   transform: translateX(0);
   transition: 100ms opacity;
 }
