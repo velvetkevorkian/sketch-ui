@@ -148,13 +148,13 @@ export default class UI {
     el.innerHTML = `
     <div class='sketch-ui-panel' id='${this.options.uid}' style='${panelStyle(this.width, this.height)}'>
       <div class='sketch-ui-handle'>Move</div>
-      <button class='ui-toggle'>Toggle UI</button>
       <button class='ui-clear'>Clear saved</button>
     </div>
   `
     const panel = el.querySelector(`#${this.options.uid}`)
-    panel.querySelector('.ui-toggle')
-      .addEventListener('click', () => { panel.classList.toggle('hidden') })
+    document.addEventListener('keyup', event => {
+      if(event.key == 'h') panel.classList.toggle('hidden')
+    })
 
     panel.querySelector('.ui-clear')
       .addEventListener('click', () => window.localStorage.clear())

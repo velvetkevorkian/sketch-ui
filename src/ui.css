@@ -5,14 +5,12 @@
 .sketch-ui-panel {
   background: rgba(200, 200, 200, 0.7);
   font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
-  /* left: 0.5em; */
   max-height: 100vh;
   opacity: 0.5;
   overflow: auto;
-  padding: 2em 0.5em 1em;
+  padding: 3em 0.5em 1em;
   position: fixed;
   resize: both;
-  /* top: 0.5em; */
   transform: translateX(0);
   transition: 100ms opacity;
 }
@@ -22,23 +20,11 @@
 }
 
 .sketch-ui-panel.hidden {
-  overflow: visible;
-  transform: translateX(-500px);
+  display: none;
 }
 
-.sketch-ui-panel .ui-toggle {
+.sketch-ui-panel .ui-clear {
   margin-bottom: 1em;
-  opacity: 1;
-  transition: 100ms opacity, 200ms transform;
-}
-
-.sketch-ui-panel.hidden .ui-toggle {
-  opacity: 0;
-  transform: translateX(500px);
-}
-
-.sketch-ui-panel.hidden .ui-toggle:hover {
-  opacity: 1;
 }
 
 .sketch-ui-panel label {
@@ -51,9 +37,7 @@
 .sketch-ui-panel label span {
   display: inline-block;
   font-weight: normal;
-  overflow: hidden;
   vertical-align: bottom;
-  width: 6em;
 }
 
 .sketch-ui-panel label span::before {
@@ -86,6 +70,7 @@
 .sketch-ui-handle {
   text-align: center;
   background: darkblue;
+  padding: 0.5em;
   position: absolute;
   top: 0;
   left: 0;
