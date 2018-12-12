@@ -83,7 +83,7 @@ context('ui.js', () => {
   describe('creates selects', () => {
     beforeEach(() => {
       ui = new UI(
-        {testArray: {value: ['one', 'two']}},
+        {testArray: {options: ['one', 'two']}},
         {uid: 'id'}
       )
     })

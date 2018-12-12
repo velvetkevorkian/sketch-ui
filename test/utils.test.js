@@ -14,10 +14,6 @@ context('utils.js', () => {
       expect(inferType(true)).to.equal('checkbox')
     })
 
-    it('select if array', () => {
-      expect(inferType(['one', 'two'])).to.equal('select')
-    })
-
     it('falls back to text', () => {
       expect(inferType('blah')).to.equal('text')
     })
@@ -25,7 +21,7 @@ context('utils.js', () => {
 
   describe('panelStyle', () => {
     it('returns a style string', () => {
-      expect(panelStyle(100, 200)).to.equal('width: 100px; height: 200px;')
+      expect(panelStyle(100, 200)).to.equal('width: 100px; height: 200px; transform: translateX(0px) translateY(0px);')
     })
   })
 })

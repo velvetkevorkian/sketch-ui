@@ -215,16 +215,14 @@ export default class UI {
 
     if(variables.type == 'checkbox') {
       input.removeAttribute('value')
-      if(variables.value == true) {
-        input.setAttribute('checked', variables.value)
-      }
-    }
+      if(variables.value) input.setAttribute('checked', variables.value)
 
-    if(variables.type == 'checkbox') {
       input.addEventListener('change', event => {
         this.proxy[name] = event.target.checked
       })
-    } else {
+    }
+
+    else {
       input.addEventListener('input', event => {
         this.proxy[name] = event.target.value
       })
