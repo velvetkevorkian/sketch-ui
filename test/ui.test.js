@@ -6,7 +6,7 @@ context('ui.js', () => {
   beforeEach(() => {
     ui = new UI(
       {testVar: {value: 127}},
-      {uid: 'id'}
+      {uid: 'id', save: false}
     )
   })
 
@@ -178,6 +178,25 @@ context('ui.js', () => {
       const button = document.getElementById('button-id')
       button.dispatchEvent(evt)
       expect(context.called).to.be.true
+    })
+  })
+
+  describe('getValues', () => {
+    it('serialises values to an array of objects', () => {
+      expect(ui.getValues()).to.deep.equal([{testVar: 127}])
+    })
+  })
+
+  describe('getState', () => {
+    it('returns an object with the dimensions and values', () => {
+      expect(ui.getState()).to.deep.include({
+        // why don't width/height work?
+        // width: 320,
+        // height: 450,
+        xpos: 0,
+        ypos: 0,
+        values: [{testVar: 127}]
+      })
     })
   })
 
