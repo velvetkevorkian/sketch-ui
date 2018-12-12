@@ -163,8 +163,9 @@ export default class UI {
     handle.addEventListener('mousedown', event => {
       event.preventDefault()
       const rect = panel.getBoundingClientRect()
+      const scroll = document.querySelector(this.options.selector).getBoundingClientRect().top
       this.xpos = rect.left
-      this.ypos = rect.top
+      this.ypos = rect.top - scroll
       this.xOffset = event.clientX - this.xpos
       this.yOffset = event.clientY - this.ypos
 
@@ -254,27 +255,19 @@ export default class UI {
   buildSelect(name, variables) {
     let select = document.createElement('select')
     select.setAttribute('id', this.attrWithUid(name))
+    const initialValue = variables.value ? variables.value : variables.options[0]
     select.innerHTML = variables.options.map(option => {
-      const selected = option == variables.value ? 'selected' : ''
+      const selected = option == initialValue ? 'selected' : ''
       return `
         <option ${selected} value='${option}'>
           ${option}
         </option>
-      `
-    }).join('')
-
-    const initialValue = variables.value ? variables.value : variables.options[0]
+      `}).join('')
 
     document.querySelector(`[for=${this.attrWithUid(name)}] span`).innerHTML = initialValue
-
-    select.addEventListener('change', event => {
-      this.proxy[name] = event.target.value
-    })
-
+    select.addEventListener('change', event => this.proxy[name] = event.target.value)
     return select
   }
 
-  attrWithUid(attr) {
-    return `${attr}-${this.options.uid}`
-  }
+  attrWithUid(attr) { return `${attr}-${this.options.uid}` }
 }
