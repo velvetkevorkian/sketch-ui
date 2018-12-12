@@ -9,8 +9,8 @@ export default class UI {
       save: true,
       width: 320,
       height: 450,
-      xpos: 20,
-      ypos: 20
+      xpos: 0,
+      ypos: 0
     }
     if(!options) options = {}
     this.options = Object.assign(defaults, options)
@@ -44,7 +44,6 @@ export default class UI {
     this.proxy = this.revocable.proxy
     window.sketchUI = (window.ui || [])
     window.sketchUI.push(this)
-    document.dispatchEvent(new Event('proxy-ready'))
   }
 
   destroy() {
@@ -258,16 +257,17 @@ export default class UI {
     let select = document.createElement('select')
     select.setAttribute('id', this.attrWithUid(name))
     select.innerHTML = variables.options.map(option => {
-      return `<option value='${option}'>${option}</option>`
+      const selected = option == variables.value ? 'selected' : ''
+      return `
+        <option ${selected} value='${option}'>
+          ${option}
+        </option>
+      `
     }).join('')
 
     const initialValue = variables.value ? variables.value : variables.options[0]
 
     document.querySelector(`[for=${this.attrWithUid(name)}] span`).innerHTML = initialValue
-
-    document.addEventListener('proxy-ready', () => {
-      this.proxy[name] = initialValue
-    }, {once: true})
 
     select.addEventListener('change', event => {
       this.proxy[name] = event.target.value
