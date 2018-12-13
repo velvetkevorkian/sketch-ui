@@ -256,6 +256,7 @@ export default class UI {
     let select = document.createElement('select')
     select.setAttribute('id', this.attrWithUid(name))
     const initialValue = variables.value ? variables.value : variables.options[0]
+    variables.value = initialValue
     select.innerHTML = variables.options.map(option => {
       const selected = option == initialValue ? 'selected' : ''
       return `
