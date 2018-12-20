@@ -66,9 +66,9 @@ context('ui.js', () => {
     })
 
     it('can be hidden', () => {
-      const toggle = document.querySelector('.ui-toggle')
-      const event = new Event('click')
-      toggle.dispatchEvent(event)
+      const event = new Event('keyup')
+      event.key = 'h'
+      document.dispatchEvent(event)
       const panel = document.querySelector('.sketch-ui-panel')
       expect(panel).to.have.class('hidden')
     })
