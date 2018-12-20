@@ -3,41 +3,19 @@ import { validate, inferType, defaultSettings, panelStyle } from './utils.js'
 export default class UI {
   constructor(variables, options) {
     this.variables = variables
-    const defaults = {
+    const defaultOptions = {
       uid: 'ui-' + Math.floor(Math.random() * Date.now()),
       selector: 'body',
-      save: true,
+      save: false,
       width: 320,
       height: 450,
       xpos: 0,
       ypos: 0
     }
     if(!options) options = {}
-    this.options = Object.assign(defaults, options)
-    this.width = this.options.width
-    this.height = this.options.height
-    this.xpos = this.options.xpos
-    this.ypos = this.options.ypos
+    this.options = Object.assign(defaultOptions, options)
 
-    // jsdom throws an error if you access localStorage on about:blank
-    // but it seems to be impossible to navigate to a url with jsdom-global.
-    // Swallow that particular error and hope for the best.
-    try {
-      const savedState = window.localStorage.getItem(this.options.uid)
-      if(savedState && this.options.save) {
-        const parsedState = JSON.parse(savedState)
-        this.width = parsedState.width
-        this.height = parsedState.height
-        this.xpos = parsedState.xpos
-        this.ypos = parsedState.ypos
-
-        parsedState.values.forEach(val => {
-          const name = Object.keys(val)[0]
-          const value = Object.values(val)[0]
-          this.variables[name].value = value
-        })
-      }
-    } catch(err) { if(err.name != 'SecurityError') throw err }
+    if(this.options.save) this.readSavedState()
 
     this.createUI(this.variables)
     this.revocable = this.createProxy()
@@ -52,12 +30,28 @@ export default class UI {
     return null
   }
 
+  readSavedState() {
+    const savedState = window.localStorage.getItem(this.options.uid)
+    if(savedState) {
+      const parsedState = JSON.parse(savedState)
+
+      parsedState.values.forEach(val => {
+        const name = Object.keys(val)[0]
+        const value = Object.values(val)[0]
+        if(this.variables[name]) this.variables[name].value = value
+      })
+
+      delete parsedState.values
+      this.options = Object.assign(this.options, parsedState)
+    }
+  }
+
   getState() {
     return {
-      width: this.width,
-      height: this.height,
-      xpos: this.xpos,
-      ypos: this.ypos,
+      width: this.options.width,
+      height: this.options.height,
+      xpos: this.options.xpos,
+      ypos: this.options.ypos,
       values: this.getValues()
     }
   }
@@ -65,9 +59,7 @@ export default class UI {
   saveState() {
     if(this.options.save) {
       const newState = JSON.stringify(this.getState())
-      try {
-        window.localStorage.setItem(this.options.uid, newState)
-      } catch(err) { if(err.name != 'SecurityError') throw err }
+      window.localStorage.setItem(this.options.uid, newState)
     }
   }
 
@@ -96,9 +88,10 @@ export default class UI {
   }
 
   updateSize() {
-    this.width = this.panel.offsetWidth
-    this.height = this.panel.offsetHeight
-    const newStyle = panelStyle(this.width, this.height, {x: this.xpos, y: this.ypos})
+    const opts = this.options
+    opts.width = this.panel.offsetWidth
+    opts.height = this.panel.offsetHeight
+    const newStyle = panelStyle(opts.width, opts.height, {x: opts.xpos, y: opts.ypos})
     this.panel.setAttribute('style', newStyle)
     this.saveState()
   }
@@ -146,7 +139,7 @@ export default class UI {
   buildPanel(selector = this.options.selector) {
     const el = document.querySelector(selector)
     el.innerHTML = `
-    <div class='sketch-ui-panel' id='${this.options.uid}' style='${panelStyle(this.width, this.height)}'>
+    <div class='sketch-ui-panel' id='${this.options.uid}' style='${panelStyle(this.options.width, this.options.height)}'>
       <div class='sketch-ui-handle'>Move</div>
       <button class='ui-clear'>Clear saved</button>
     </div>
@@ -164,10 +157,11 @@ export default class UI {
       event.preventDefault()
       const rect = panel.getBoundingClientRect()
       const scroll = document.querySelector(this.options.selector).getBoundingClientRect().top
-      this.xpos = rect.left
-      this.ypos = rect.top - scroll
-      this.xOffset = event.clientX - this.xpos
-      this.yOffset = event.clientY - this.ypos
+      const opts = this.options
+      opts.xpos = rect.left
+      opts.ypos = rect.top - scroll
+      opts.xOffset = event.clientX - opts.xpos
+      opts.yOffset = event.clientY - opts.ypos
 
       const callback = this.handlePanelDrag.bind(this)
       document.addEventListener('mousemove', callback)
@@ -183,8 +177,8 @@ export default class UI {
   }
 
   handlePanelDrag(event) {
-    this.xpos = event.clientX - this.xOffset
-    this.ypos = event.clientY - this.yOffset
+    this.options.xpos = event.clientX - this.options.xOffset
+    this.options.ypos = event.clientY - this.options.yOffset
     this.updateSize()
   }
 
