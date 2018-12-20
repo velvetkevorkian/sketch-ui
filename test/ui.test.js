@@ -200,11 +200,16 @@ context('ui.js', () => {
     })
   })
 
-  describe.skip('can create multiple UIs', () => {
+  describe('can create multiple UIs', () => {
     beforeEach(() => {
+      if(!document.querySelector('.ui-2-wrapper')) {
+        const div = document.createElement('div')
+        div.classList.add('ui-2-wrapper')
+        document.body.appendChild(div)
+      }
       ui2 = new UI(
         {testVar: {value: 127}},
-        {uid: 'id2'}
+        {uid: 'id2', save: false, selector: '.ui-2-wrapper'}
       )
     })
 
