@@ -153,8 +153,10 @@ const vars = {
 ```
 
 ## To Do
+- [ ] drag handle should be clearer and shouldn't scroll away
+- [ ] make clearing saved state a function that can be called externally not hard-coded in
 - [ ] document with gifs
-- [ ] document multiple instances
+- [ ] document multiple instances and new options
 - [ ] fieldsets
 - [ ] use with script tag only
 - [ ] worked examples
@@ -164,3 +166,4 @@ const vars = {
 - [ ] show/hide options?
 - [ ] can callbacks reference the parent UI element?
 - [ ] url encoding?
+- [ ] load/save presets?
