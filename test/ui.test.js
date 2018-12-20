@@ -137,6 +137,10 @@ context('ui.js', () => {
         proxy.testVar = 1000
         expect(proxy.testVar).to.equal(255)
       })
+
+      it('returns undefined for a missing variable', () => {
+        expect(proxy.foo).to.be.undefined
+      })
     })
   })
 

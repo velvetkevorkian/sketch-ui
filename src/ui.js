@@ -75,7 +75,14 @@ export default class UI {
 
   createProxy() {
     return Proxy.revocable(this.variables, {
-      get: (obj, prop) => obj[prop].value,
+      get: (obj, prop) => {
+        if (obj[prop]) return obj[prop].value
+        else {
+          // eslint-disable-next-line no-console
+          console.warn(`No variable ${prop} found`)
+          return undefined
+        }
+      },
       set: (obj, prop, value) => {
         value = validate(obj, prop, value)
         obj[prop].value = value
