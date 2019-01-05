@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.0.5] - 2019-01-05
 ### Added
 - CSSLint
 - Drag to move and resize UI panel
