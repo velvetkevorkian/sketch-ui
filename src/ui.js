@@ -20,8 +20,6 @@ export default class UI {
     this.createUI(this.variables)
     this.revocable = this.createProxy()
     this.proxy = this.revocable.proxy
-    window.sketchUI = (window.ui || [])
-    window.sketchUI.push(this)
   }
 
   destroy() {

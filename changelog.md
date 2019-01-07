@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Fixed
+- Remove incorrect window debug assignment
+
 ## [0.0.5] - 2019-01-05
 ### Added
 - CSSLint
